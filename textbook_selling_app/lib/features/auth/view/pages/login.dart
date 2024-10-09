@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
+import 'package:textbook_selling_app/features/auth/view/widgets/auth_redirection.dart';
 import 'package:textbook_selling_app/features/auth/viewmodel/login_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,29 +37,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       CustomTextFormField(
-                        hintText: 'Email',
+                        labelText: 'Email',
+                        hintText: 'email@example.com',
                         validator: viewModel.validateEmail,
                         onSaved: viewModel.onSavedEmail,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 10),
                       CustomTextFormField(
-                        hintText: 'Password',
+                        labelText: 'Password',
+                        hintText: 'Minimum 6 characters',
                         validator: viewModel.validatePassword,
                         onSaved: viewModel.onSavedPassword,
                         obscureText: true,
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                          onPressed: () {
-                            if (viewModel.validateForm()) {
-                              viewModel.saveForm();
-                              // Prikaz email-a i lozinke za demonstraciju
-                              print('Email: ${viewModel.email}');
-                              print('Password: ${viewModel.password}');
-                            }
-                          },
-                          text: 'Login'),
+                        onPressed: viewModel.saveForm,
+                        text: 'Login',
+                      ),
+                      const SizedBox(height: 20),
+                      const CustomRichText(authType: AuthType.login)
                     ],
                   ),
                 ),

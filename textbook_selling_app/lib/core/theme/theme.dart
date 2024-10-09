@@ -14,11 +14,13 @@ class AppTheme {
           Color errorBorderColor,
           Color focusedErrorBorderColor) =>
       InputDecorationTheme(
-          contentPadding: const EdgeInsets.all(25),
-          enabledBorder: _border(enabledBoredColor),
-          focusedBorder: _border(focusedBorderColor),
-          errorBorder: _border(errorBorderColor),
-          focusedErrorBorder: _border(focusedBorderColor));
+        contentPadding: const EdgeInsets.all(25),
+        enabledBorder: _border(enabledBoredColor),
+        focusedBorder: _border(focusedBorderColor),
+        errorBorder: _border(errorBorderColor),
+        focusedErrorBorder: _border(focusedBorderColor),
+        errorStyle: const TextStyle(height: 0),
+      );
 
   // Tamna tema
   static final darkTheme = ThemeData.dark().copyWith(
@@ -33,11 +35,14 @@ class AppTheme {
       onError: ColorPalette.onErrorDark,
     ),
     inputDecorationTheme: _inputDecorationTheme(
-        ColorPalette.borderEnabledDark,
-        ColorPalette.secondaryDark,
-        ColorPalette.errorDark,
-        ColorPalette.onErrorDark),
-    textTheme: GoogleFonts.robotoMonoTextTheme(ThemeData.dark().textTheme),
+      ColorPalette.borderEnabledDark,
+      ColorPalette.secondaryDark,
+      ColorPalette.errorDark,
+      ColorPalette.onErrorDark,
+    ),
+    textTheme: GoogleFonts.robotoMonoTextTheme(
+      ThemeData.dark().textTheme,
+    ),
   );
 
   // Svetla tema
@@ -57,6 +62,8 @@ class AppTheme {
         ColorPalette.secondaryLight,
         ColorPalette.errorLight,
         ColorPalette.onErrorLight),
-    textTheme: GoogleFonts.robotoMonoTextTheme(ThemeData.light().textTheme),
+    textTheme: GoogleFonts.robotoMonoTextTheme(
+      ThemeData.light().textTheme,
+    ),
   );
 }

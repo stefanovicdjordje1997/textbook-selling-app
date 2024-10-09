@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:textbook_selling_app/core/utils/validators.dart';
 
 class LoginViewmodel {
   // Dodavanje GlobalKey za formu
@@ -9,42 +10,24 @@ class LoginViewmodel {
   String? password;
 
   // Validacija email-a
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email cannot be empty';
-    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$').hasMatch(value)) {
-      return 'Enter a valid email';
-    }
-    return null;
-  }
+  String? validateEmail(String? value) => Validators.validateEmail(value);
 
   // Validacija lozinke
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password cannot be empty';
-    } else if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-    return null;
-  }
+  String? validatePassword(String? value) => Validators.validatePassword(value);
 
   // Čuvanje unosa email-a
-  void onSavedEmail(String? value) {
-    email = value;
-  }
+  void onSavedEmail(String? value) => email = value;
 
   // Čuvanje unosa lozinke
-  void onSavedPassword(String? value) {
-    password = value;
-  }
+  void onSavedPassword(String? value) => password = value;
 
   // Validacija forme
-  bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
-  }
+  bool validateForm() => formKey.currentState?.validate() ?? false;
 
   // Čuvanje unosa u formi
   void saveForm() {
-    formKey.currentState?.save();
+    if (validateForm()) {
+      formKey.currentState?.save();
+    }
   }
 }

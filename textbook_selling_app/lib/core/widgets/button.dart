@@ -28,14 +28,15 @@ class CustomButton extends StatelessWidget {
         ),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          onPressed;
+          onPressed();
         },
         child: Text(
           text,
           style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
