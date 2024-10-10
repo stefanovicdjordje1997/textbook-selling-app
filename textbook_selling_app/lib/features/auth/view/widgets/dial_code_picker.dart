@@ -13,7 +13,7 @@ class DialCodePicker extends ConsumerWidget {
     final viewModel = ref.watch(registerViewModelProvider.notifier);
     final countries = ref.watch(registerViewModelProvider).countries;
     final defaultItem = ref.watch(registerViewModelProvider).defaultItem;
-    var _currentItem = {};
+    var currentItem = {};
 
     if (countries == null || countries.isEmpty) {
       // Ako zemlje još nisu učitane
@@ -30,11 +30,11 @@ class DialCodePicker extends ConsumerWidget {
         itemDisplayValue: (item) =>
             '${item['emoji']} ${item['name']} (${item['dial_code']})',
         selectedItemDisplayValue: (selectedItem) {
-          _currentItem = selectedItem;
+          currentItem = selectedItem;
           return '${selectedItem['emoji']} (${selectedItem['dial_code']})';
         },
         onSaved: (value) {
-          onSaved(_currentItem['dial_code']);
+          onSaved(currentItem['dial_code']);
         },
         itemSearchValue: (item) => item['name'] ?? '',
       ),

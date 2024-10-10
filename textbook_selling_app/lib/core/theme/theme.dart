@@ -19,7 +19,6 @@ class AppTheme {
         focusedBorder: _border(focusedBorderColor),
         errorBorder: _border(errorBorderColor),
         focusedErrorBorder: _border(focusedBorderColor),
-        errorStyle: const TextStyle(height: 0),
       );
 
   // Tamna tema
@@ -33,6 +32,7 @@ class AppTheme {
       onSurface: ColorPalette.onSurfaceDark,
       error: ColorPalette.errorDark,
       onError: ColorPalette.onErrorDark,
+      outline: ColorPalette.borderEnabledDark,
     ),
     inputDecorationTheme: _inputDecorationTheme(
       ColorPalette.borderEnabledDark,
@@ -56,6 +56,7 @@ class AppTheme {
       onSurface: ColorPalette.onSurfaceLight,
       error: ColorPalette.errorLight,
       onError: ColorPalette.onErrorLight,
+      outline: ColorPalette.borderEnabledLight,
     ),
     inputDecorationTheme: _inputDecorationTheme(
         ColorPalette.borderEnabledLight,

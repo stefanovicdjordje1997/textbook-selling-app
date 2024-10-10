@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 
@@ -11,7 +13,6 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  List<dynamic> _countries = [];
   var _defaultItem = {};
 
   // Učitavanje podataka o zemljama
@@ -30,6 +31,35 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
     // Ažuriranje stanja
     state = state.copyWith(countries: items, defaultItem: _defaultItem);
+  }
+
+  // Image picker metode
+  Future<void> pickImageFromCamera() async {
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+
+    if (pickedImage != null) {
+      state = state.copyWith(pickedImageFile: File(pickedImage.path));
+    }
+  }
+
+  Future<void> pickImageFromGallery() async {
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+
+    if (pickedImage != null) {
+      state = state.copyWith(pickedImageFile: File(pickedImage.path));
+    }
+  }
+
+  void removeImage() {
+    state = state.copyWith(pickedImageFile: null);
   }
 
   // Validators
@@ -117,6 +147,7 @@ class RegisterState {
   final String? phoneNumber;
   final List<dynamic>? countries; // Lista zemalja
   final dynamic defaultItem;
+  final File? pickedImageFile;
 
   RegisterState({
     this.name,
@@ -128,6 +159,7 @@ class RegisterState {
     this.phoneNumber,
     this.countries,
     this.defaultItem,
+    this.pickedImageFile,
   });
 
   // copyWith metoda koja omogućava ažuriranje samo određenih polja
@@ -141,6 +173,7 @@ class RegisterState {
     String? phoneNumber,
     List<dynamic>? countries,
     dynamic defaultItem,
+    File? pickedImageFile,
   }) {
     return RegisterState(
       name: name ?? this.name,
@@ -152,6 +185,7 @@ class RegisterState {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countries: countries ?? this.countries,
       defaultItem: defaultItem ?? this.defaultItem,
+      pickedImageFile: pickedImageFile,
     );
   }
 }
