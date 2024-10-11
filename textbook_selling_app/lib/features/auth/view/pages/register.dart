@@ -24,7 +24,11 @@ class RegisterScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                ProfileImagePicker(onPickImage: (value) {}),
+                ProfileImagePicker(
+                  onPickImageFromCamera: viewModel.pickImageFromCamera,
+                  onPickImageFromGallery: viewModel.pickImageFromGallery,
+                  onRemoveImage: viewModel.removeImage,
+                ),
                 const SizedBox(height: 16),
                 Flex(
                   direction: Axis.horizontal,
@@ -104,7 +108,9 @@ class RegisterScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
                 CustomButton(
-                  onPressed: viewModel.saveForm,
+                  onPressed: () {
+                    viewModel.saveForm(context);
+                  },
                   text: 'Register',
                 ),
                 const SizedBox(height: 20),

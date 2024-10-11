@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
+import 'package:textbook_selling_app/core/utils/snack_bar.dart';
+import 'package:textbook_selling_app/features/auth/services/auth_service.dart';
 
-// StateNotifier za upravljanje stanjem
+// StateNotifier
 class RegisterViewModel extends StateNotifier<RegisterState> {
   RegisterViewModel() : super(RegisterState());
 
@@ -15,7 +18,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   var _defaultItem = {};
 
-  // Učitavanje podataka o zemljama
+  // Get data with countries and dial codes
   Future<void> loadCountries() async {
     String data =
         await rootBundle.loadString('lib/core/assets/country_codes.json');
@@ -25,15 +28,15 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
       (country) => country['name'] == 'Serbia',
       orElse: () => {},
     );
+    // Setting the default dial code value
     if (serbia != null && serbia.isNotEmpty) {
       _defaultItem = serbia;
     }
 
-    // Ažuriranje stanja
     state = state.copyWith(countries: items, defaultItem: _defaultItem);
   }
 
-  // Image picker metode
+  // Image picker methods
   Future<void> pickImageFromCamera() async {
     final pickedImage = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -59,7 +62,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
   }
 
   void removeImage() {
-    state = state.copyWith(pickedImageFile: null);
+    state = state.copyWith(pickedImageFile: File(''));
   }
 
   // Validators
@@ -119,24 +122,48 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(phoneNumber: value);
   }
 
-  // Validacija forme
+  // Form validation
   bool validateForm() => formKey.currentState?.validate() ?? false;
 
-  // Čuvanje unosa u formi
-  void saveForm() {
+  // Save form when register button is clicked
+  void saveForm(BuildContext context) async {
     if (validateForm()) {
       formKey.currentState?.save();
-      print(state.name);
-      print(state.surname);
-      print(state.email);
-      print(state.password);
-      print(state.dateOfBirth);
-      print(state.dialCode! + state.phoneNumber!);
+
+      final fullPhoneNumber = state.dialCode! + state.phoneNumber!;
+
+      // Create new user in database (register)
+      try {
+        await AuthService.registerUser(
+            name: state.name,
+            surname: state.surname,
+            dateOfBirth: state.dateOfBirth,
+            phoneNumber: fullPhoneNumber,
+            email: state.email,
+            password: state.password,
+            profilePhoto: state.pickedImageFile);
+      } catch (error) {
+        if (error is FirebaseAuthException) {
+          if (context.mounted) {
+            showCustomSnackBar(
+                context: context,
+                message: error.message ?? 'Unknown error.',
+                type: SnackBarType.error);
+          }
+        } else {
+          if (context.mounted) {
+            showCustomSnackBar(
+                context: context,
+                message: 'An error occured!',
+                type: SnackBarType.error);
+          }
+        }
+      }
     }
   }
 }
 
-// Definisanje state-a za Register
+// Define RegisterState
 class RegisterState {
   final String? name;
   final String? surname;
@@ -145,7 +172,7 @@ class RegisterState {
   final DateTime? dateOfBirth;
   final String? dialCode;
   final String? phoneNumber;
-  final List<dynamic>? countries; // Lista zemalja
+  final List<dynamic>? countries;
   final dynamic defaultItem;
   final File? pickedImageFile;
 
@@ -162,7 +189,6 @@ class RegisterState {
     this.pickedImageFile,
   });
 
-  // copyWith metoda koja omogućava ažuriranje samo određenih polja
   RegisterState copyWith({
     String? name,
     String? surname,
@@ -185,7 +211,7 @@ class RegisterState {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       countries: countries ?? this.countries,
       defaultItem: defaultItem ?? this.defaultItem,
-      pickedImageFile: pickedImageFile,
+      pickedImageFile: pickedImageFile ?? this.pickedImageFile,
     );
   }
 }

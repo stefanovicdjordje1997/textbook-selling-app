@@ -16,7 +16,6 @@ class DialCodePicker extends ConsumerWidget {
     var currentItem = {};
 
     if (countries == null || countries.isEmpty) {
-      // Ako zemlje još nisu učitane
       viewModel.loadCountries();
       return const CircularProgressIndicator();
     }

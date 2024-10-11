@@ -35,7 +35,7 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
   void initState() {
     super.initState();
     if (widget.itemSearchValue != null) {
-      _searchController.addListener(_filterItems); // Dodaj listener za pretragu
+      _searchController.addListener(_filterItems);
     }
   }
 
@@ -45,17 +45,16 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
     super.dispose();
   }
 
-  // Ova metoda se poziva kad god widget postane "stari" i ažurira se sa novim vrednostima
+  // This methode is used when we need to apply search term and refresh the list of items
   @override
   void didUpdateWidget(covariant CustomDropdownMenu<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.items != oldWidget.items) {
-      _filteredItems =
-          widget.items; // Ažuriraj _filteredItems kad se podaci promene
+      _filteredItems = widget.items;
     }
   }
 
-  // Metod za filtriranje na osnovu unosa u search polje
+  // Method for searching an item
   void _filterItems() {
     String query = _searchController.text.toLowerCase();
     setState(() {
@@ -65,7 +64,7 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
     });
   }
 
-  // Prikaz modalnog prozora sa listom stavki
+  // Showing modal window with the list of items
   void _showPicker() {
     showModalBottomSheet(
       context: context,
@@ -114,7 +113,7 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
                         setState(() {
                           _selectedItem = item;
                         });
-                        Navigator.pop(context); // Zatvori modal nakon izbora
+                        Navigator.pop(context);
                       },
                     );
                   },
@@ -129,10 +128,8 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
 
   @override
   Widget build(BuildContext context) {
-    // U slučaju da se widget items nisu promenili, postavi _filteredItems samo ako su dostupni
     if (_filteredItems.isEmpty && widget.items.isNotEmpty) {
-      _filteredItems =
-          widget.items; // Postavi početnu vrednost kada se podaci učitaju
+      _filteredItems = widget.items;
     }
     final displayItem = _selectedItem ?? widget.defaultItem;
 
@@ -150,29 +147,5 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
       ),
       onSaved: widget.onSaved,
     );
-    // return GestureDetector(
-    //   onTap: _showPicker,
-    //   child: Container(
-    //     height: 74,
-    //     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-    //     decoration: BoxDecoration(
-    //       border: Border.all(
-    //           color: Theme.of(context).colorScheme.outline, width: 3),
-    //       borderRadius: BorderRadius.circular(10),
-    //     ),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         Text(
-    //           widget.selectedItemDisplayValue != null
-    //               ? widget.selectedItemDisplayValue!(displayItem)
-    //               : widget.itemDisplayValue(displayItem),
-    //           style: const TextStyle(fontSize: 16),
-    //         ),
-    //         const Icon(Icons.arrow_drop_down),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

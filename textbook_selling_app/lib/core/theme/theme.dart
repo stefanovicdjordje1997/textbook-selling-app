@@ -21,7 +21,7 @@ class AppTheme {
         focusedErrorBorder: _border(focusedBorderColor),
       );
 
-  // Tamna tema
+  // Dark theme
   static final darkTheme = ThemeData.dark().copyWith(
     colorScheme: const ColorScheme.dark(
       primary: ColorPalette.primaryDark,
@@ -45,7 +45,7 @@ class AppTheme {
     ),
   );
 
-  // Svetla tema
+  // Light theme
   static final lightTheme = ThemeData.light().copyWith(
     colorScheme: const ColorScheme.light(
       primary: ColorPalette.primaryLight,

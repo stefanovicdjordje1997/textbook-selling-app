@@ -1,0 +1,57 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+final _storage = FirebaseStorage.instance;
+
+class AuthService {
+  static Future<void> registerUser({
+    required String? name,
+    required String? surname,
+    required DateTime? dateOfBirth,
+    required String? phoneNumber,
+    required String? email,
+    required String? password,
+    File? profilePhoto,
+  }) async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email ?? '',
+        password: password ?? '',
+      );
+      User? user = userCredential.user;
+
+      if (user != null) {
+        String? photoURL;
+
+        if (profilePhoto != null && profilePhoto.path != '') {
+          final photoRef = _storage
+              .ref()
+              .child('user_profile_photos')
+              .child('${user.uid}.jpg');
+
+          UploadTask uploadTask = photoRef.putFile(profilePhoto);
+          TaskSnapshot snapshot = await uploadTask;
+          photoURL = await snapshot.ref.getDownloadURL();
+        }
+
+        await _firestore.collection('users').doc(user.uid).set({
+          'name': name,
+          'surname': surname,
+          'dateOfBirth':
+              dateOfBirth != null ? dateOfBirth.toIso8601String() : '',
+          'phoneNumber': phoneNumber,
+          'email': email,
+          'profilePhotoURL': photoURL ?? '',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+    } on FirebaseAuthException {
+      rethrow;
+    }
+  }
+}

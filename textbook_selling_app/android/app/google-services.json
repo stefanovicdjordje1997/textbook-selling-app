@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704615959688",
+    "project_id": "textbook-selling-app",
+    "storage_bucket": "textbook-selling-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704615959688:android:52a014c137f96f04ce233d",
+        "android_client_info": {
+          "package_name": "com.example.textbook_selling_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByrHo5Tm5kAM6p9UXI3JdbIYWvDHdcPao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

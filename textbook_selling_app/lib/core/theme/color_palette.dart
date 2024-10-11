@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorPalette {
-  // Tamna tema
+  // Dark theme
   static const primaryDark = Color(0xFFF8BB71);
   static const onPrimaryDark = Color(0xFF472A00);
   static const secondaryDark = Color(0xFFDFC2A2);
@@ -12,7 +12,7 @@ class ColorPalette {
   static const onErrorDark = Color(0xFF690005);
   static const borderEnabledDark = Color.fromARGB(255, 92, 86, 80);
 
-  // Svetla tema
+  // Light theme
   static const primaryLight = Color(0xFF87521A);
   static const onPrimaryLight = Color(0xFFFFFFFF);
   static const secondaryLight = Color(0xFF735943);

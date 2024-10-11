@@ -12,7 +12,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Inicijalizacija ViewModel-a
   final viewModel = LoginViewmodel();
 
   @override
@@ -31,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
               Form(
-                key: viewModel.formKey, // FormKey iz ViewModel-a
+                key: viewModel.formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
