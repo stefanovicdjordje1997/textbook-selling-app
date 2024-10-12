@@ -70,7 +70,9 @@ flutter:
   assets:
      - lib/core/assets/images/login_image.png 
      - lib/core/assets/images/register_image.png
+     - lib/core/assets/images/loader_animation.gif
      - lib/core/assets/country_codes.json
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

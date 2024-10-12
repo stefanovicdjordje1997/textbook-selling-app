@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum SnackBarType { success, error, info }
 
-void showCustomSnackBar(
+void showSnackBar(
     {required BuildContext context,
     required String message,
     required SnackBarType type}) {
@@ -57,7 +57,7 @@ void showCustomSnackBar(
     ),
   );
 
-  // Prikazujemo SnackBar
+  // Show SnackBar
   ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

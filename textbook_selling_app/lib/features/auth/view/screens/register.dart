@@ -6,7 +6,7 @@ import 'package:textbook_selling_app/features/auth/view/widgets/date_picker.dart
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/dial_code_picker.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/profile_image_picker.dart';
-import 'package:textbook_selling_app/features/auth/viewmodel/register_viewmodel.dart';
+import 'package:textbook_selling_app/features/auth/viewModel/register_viewmodel.dart';
 
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});

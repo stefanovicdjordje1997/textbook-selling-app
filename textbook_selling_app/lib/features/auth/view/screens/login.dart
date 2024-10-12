@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/auth_redirection.dart';
-import 'package:textbook_selling_app/features/auth/viewmodel/login_viewmodel.dart';
+import 'package:textbook_selling_app/features/auth/viewModel/login_viewmodel.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(loginViewModelProvider.notifier);
 
-class _LoginScreenState extends State<LoginScreen> {
-  final viewModel = LoginViewmodel();
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Center(
@@ -52,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        onPressed: viewModel.saveForm,
+                        onPressed: () {
+                          viewModel.saveForm(context);
+                        },
                         text: 'Login',
                       ),
                       const SizedBox(height: 20),

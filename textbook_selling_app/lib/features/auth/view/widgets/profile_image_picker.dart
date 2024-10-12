@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/widgets/outline_button.dart';
-import 'package:textbook_selling_app/features/auth/viewmodel/register_viewmodel.dart';
+import 'package:textbook_selling_app/features/auth/viewModel/register_viewmodel.dart';
 
 class ProfileImagePicker extends ConsumerWidget {
   const ProfileImagePicker({

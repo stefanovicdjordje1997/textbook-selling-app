@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
-import 'package:textbook_selling_app/features/auth/services/auth_service.dart';
+import 'package:textbook_selling_app/core/utils/auth_service.dart';
 
 // StateNotifier
 class RegisterViewModel extends StateNotifier<RegisterState> {
@@ -95,7 +96,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   // On save methods
   void onSavedEmail(String? value) {
-    state = state.copyWith(email: value); // Ažurira state.email
+    state = state.copyWith(email: value);
   }
 
   void onSavedPassword(String? value) {
@@ -132,6 +133,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
       final fullPhoneNumber = state.dialCode! + state.phoneNumber!;
 
+      showLoader(context);
       // Create new user in database (register)
       try {
         await AuthService.registerUser(
@@ -142,17 +144,20 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             email: state.email,
             password: state.password,
             profilePhoto: state.pickedImageFile);
+        if (context.mounted) {
+          hideLoader(context);
+        }
       } catch (error) {
-        if (error is FirebaseAuthException) {
-          if (context.mounted) {
-            showCustomSnackBar(
+        if (context.mounted) {
+          hideLoader(context);
+
+          if (error is FirebaseAuthException) {
+            showSnackBar(
                 context: context,
                 message: error.message ?? 'Unknown error.',
                 type: SnackBarType.error);
-          }
-        } else {
-          if (context.mounted) {
-            showCustomSnackBar(
+          } else {
+            showSnackBar(
                 context: context,
                 message: 'An error occured!',
                 type: SnackBarType.error);
