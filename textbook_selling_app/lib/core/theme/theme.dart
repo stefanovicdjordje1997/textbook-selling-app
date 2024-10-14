@@ -19,6 +19,9 @@ class AppTheme {
         focusedBorder: _border(focusedBorderColor),
         errorBorder: _border(errorBorderColor),
         focusedErrorBorder: _border(focusedBorderColor),
+        disabledBorder: _border(
+          enabledBoredColor.withOpacity(0.5),
+        ),
       );
 
   // Dark theme

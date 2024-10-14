@@ -8,9 +8,13 @@ class CustomDropdownMenu<T> extends StatefulWidget {
     required this.defaultItem,
     required this.itemDisplayValue,
     this.selectedItemDisplayValue,
+    this.onSelectedItem,
     this.searchLabel,
     this.itemSearchValue,
-    required this.onSaved,
+    this.onSaved,
+    this.validator,
+    this.enabled = true,
+    this.shouldResetSeletion = false,
   });
 
   final String title;
@@ -18,9 +22,13 @@ class CustomDropdownMenu<T> extends StatefulWidget {
   final T defaultItem;
   final String Function(T item) itemDisplayValue;
   final String Function(T item)? selectedItemDisplayValue;
+  final void Function(T item)? onSelectedItem;
   final String? searchLabel;
   final String Function(T item)? itemSearchValue;
-  final void Function(String? value) onSaved;
+  final void Function(String? value)? onSaved;
+  final String? Function(String? value)? validator;
+  final bool enabled;
+  final bool shouldResetSeletion;
 
   @override
   State<CustomDropdownMenu<T>> createState() => _CustomDropdownMenuState<T>();
@@ -45,12 +53,15 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
     super.dispose();
   }
 
-  // This methode is used when we need to apply search term and refresh the list of items
+  // This method is used when we need to apply search term and refresh the list of items
   @override
   void didUpdateWidget(covariant CustomDropdownMenu<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.items != oldWidget.items) {
       _filteredItems = widget.items;
+      if (widget.shouldResetSeletion) {
+        _selectedItem = null;
+      }
     }
   }
 
@@ -110,6 +121,9 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
                     return ListTile(
                       title: Text(widget.itemDisplayValue(item)),
                       onTap: () {
+                        if (widget.onSelectedItem != null) {
+                          widget.onSelectedItem!(item);
+                        }
                         setState(() {
                           _selectedItem = item;
                         });
@@ -135,6 +149,9 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
 
     return TextFormField(
       readOnly: true,
+      enabled: widget.enabled,
+      minLines: 1,
+      maxLines: 3,
       onTap: _showPicker,
       decoration: InputDecoration(
         labelText: widget.title,
@@ -146,6 +163,7 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
             : widget.itemDisplayValue(displayItem),
       ),
       onSaved: widget.onSaved,
+      validator: widget.validator,
     );
   }
 }

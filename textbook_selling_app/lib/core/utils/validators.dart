@@ -47,6 +47,59 @@ class Validators {
     if (!phoneRegex.hasMatch(value.trim())) {
       return 'Enter a valid phone number';
     }
+    return null;
+  }
+
+  // Year validator
+  static String? validateYear(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Year cannot be empty';
+    }
+
+    final year = int.tryParse(value.trim());
+    if (year == null) {
+      return 'Enter a valid number';
+    }
+
+    final currentYear = DateTime.now().year;
+    if (year < 1900 || year > currentYear) {
+      return 'Enter a valid year between 1900 and $currentYear';
+    }
+
+    return null;
+  }
+
+  // Price validator
+  static String? validatePrice(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Price cannot be empty';
+    }
+
+    final price = double.tryParse(value.trim());
+    if (price == null) {
+      return 'Enter a valid number';
+    }
+
+    if (price <= 0) {
+      return 'Price must be greater than zero';
+    }
+
+    return null;
+  }
+
+  static String? validateYearOfStudy(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Study year cannot be empty';
+    }
+
+    final year = int.tryParse(value.trim());
+
+    if (year == null) {
+      return 'Enter a valid number';
+    }
+    if (year < 1 || year > 6) {
+      return 'Enter a valid study year between 1 and 6';
+    }
 
     return null;
   }
