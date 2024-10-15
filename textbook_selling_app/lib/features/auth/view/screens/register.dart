@@ -40,7 +40,10 @@ class RegisterScreen extends ConsumerWidget {
                         hintText: 'John',
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
-                        validator: viewModel.validateText,
+                        validator: (value) {
+                          return viewModel.validateText(
+                              value: value, fieldName: 'Name');
+                        },
                         onSaved: viewModel.onSavedName,
                       ),
                     ),
@@ -51,7 +54,10 @@ class RegisterScreen extends ConsumerWidget {
                         hintText: 'Doe',
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
-                        validator: viewModel.validateText,
+                        validator: (value) {
+                          return viewModel.validateText(
+                              value: value, fieldName: 'Surname');
+                        },
                         onSaved: viewModel.onSavedSurname,
                       ),
                     ),

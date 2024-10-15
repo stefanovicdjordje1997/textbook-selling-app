@@ -24,17 +24,32 @@ class Validators {
   }
 
   // Text validator
-  static String? validateText(String? value) {
+  static String? validateText({
+    required String? value,
+    String? fieldName = 'This field',
+    bool allowNumbers = false, // Parameter to allow numbers
+  }) {
     if (value == null || value.trim().isEmpty) {
-      return 'This field cannot be empty';
+      return '$fieldName cannot be empty';
     }
-    final nameRegex = RegExp(r'^[a-zA-Z\s]+(\.[a-zA-Z])?$');
+
+    // Regex pattern depending on whether numbers are allowed
+    final nameRegex = allowNumbers
+        ? RegExp(
+            r'^[a-zA-Z0-9\s]+(\.[a-zA-Z0-9])?$') // Letters, numbers, and initials (with .)
+        : RegExp(
+            r'^[a-zA-Z\s]+(\.?[a-zA-Z\s]*)$'); // Only letters and initials (with .)
+
     if (!nameRegex.hasMatch(value.trim())) {
-      return 'Enter a valid text';
+      return allowNumbers
+          ? 'Enter valid text (letters, numbers, or initials)'
+          : 'Enter a valid text (letters or initials)';
     }
+
     if (value.trim().length < 2) {
       return 'Too short';
     }
+
     return null;
   }
 
@@ -87,6 +102,7 @@ class Validators {
     return null;
   }
 
+  // Year of study validator
   static String? validateYearOfStudy(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Study year cannot be empty';
@@ -102,5 +118,19 @@ class Validators {
     }
 
     return null;
+  }
+
+  // Dropdown menu validator
+  static String? validateDropdownField(
+      String? value, List<String>? options, String fieldName) {
+    {
+      if (options == null || options.isEmpty) {
+        return null;
+      }
+      if (value == null || value.isEmpty) {
+        return 'Please select a $fieldName';
+      }
+      return null;
+    }
   }
 }

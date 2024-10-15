@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class CustomDropdownMenu<T> extends StatefulWidget {
   const CustomDropdownMenu({
     super.key,
-    required this.title,
+    required this.labelText,
     required this.items,
-    required this.defaultItem,
+    this.defaultItem,
     required this.itemDisplayValue,
     this.selectedItemDisplayValue,
     this.onSelectedItem,
@@ -17,9 +17,9 @@ class CustomDropdownMenu<T> extends StatefulWidget {
     this.shouldResetSeletion = false,
   });
 
-  final String title;
+  final String labelText;
   final List<T> items;
-  final T defaultItem;
+  final T? defaultItem;
   final String Function(T item) itemDisplayValue;
   final String Function(T item)? selectedItemDisplayValue;
   final void Function(T item)? onSelectedItem;
@@ -88,7 +88,7 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.title,
+                    widget.labelText,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -146,6 +146,15 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
       _filteredItems = widget.items;
     }
     final displayItem = _selectedItem ?? widget.defaultItem;
+    String? getText() {
+      if (displayItem != null && widget.selectedItemDisplayValue != null) {
+        return widget.selectedItemDisplayValue!(displayItem);
+      }
+      if (displayItem != null && widget.selectedItemDisplayValue == null) {
+        return widget.itemDisplayValue(displayItem);
+      }
+      return null;
+    }
 
     return TextFormField(
       readOnly: true,
@@ -154,13 +163,11 @@ class _CustomDropdownMenuState<T> extends State<CustomDropdownMenu<T>> {
       maxLines: 3,
       onTap: _showPicker,
       decoration: InputDecoration(
-        labelText: widget.title,
+        labelText: widget.labelText,
         suffixIcon: const Icon(Icons.arrow_drop_down),
       ),
       controller: TextEditingController(
-        text: widget.selectedItemDisplayValue != null
-            ? widget.selectedItemDisplayValue!(displayItem)
-            : widget.itemDisplayValue(displayItem),
+        text: getText(),
       ),
       onSaved: widget.onSaved,
       validator: widget.validator,

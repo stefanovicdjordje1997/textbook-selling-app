@@ -5,6 +5,7 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     required this.labelText,
     required this.hintText,
+    this.initialText,
     required this.validator,
     required this.onSaved,
     this.keyboardType = TextInputType.text,
@@ -13,6 +14,7 @@ class CustomTextFormField extends StatefulWidget {
   });
   final String labelText;
   final String hintText;
+  final String? initialText;
   final String? Function(String? value) validator;
   final void Function(String? value) onSaved;
   final TextInputType keyboardType;
@@ -56,6 +58,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               )
             : null,
       ),
+      controller: TextEditingController(text: widget.initialText),
       keyboardType: widget.keyboardType,
       obscureText: _obscureText,
       textCapitalization: widget.capitalFirstLetter

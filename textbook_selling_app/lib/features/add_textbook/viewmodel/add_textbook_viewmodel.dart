@@ -137,18 +137,26 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   }
 
   // Validators
+  String? validateInstitutionType(String? value) =>
+      !_institutionTypes.contains(value)
+          ? 'Please select a Institution type'
+          : null;
+
+  String? validateDropdownField(
+          {required String? value,
+          required List<String>? options,
+          required String fieldName}) =>
+      Validators.validateDropdownField(value, options, fieldName);
 
   String? validateYearOfStudy(String? value) =>
       Validators.validateYearOfStudy(value);
 
-  String? validateUniversity(String? value) {
-    if ((state.universities != null || state.universities!.isNotEmpty) &&
-        (state.selectedUniversity == null ||
-            state.selectedUniversity!.isEmpty)) {
-      return 'This field is required';
-    }
-    return null;
-  }
+  String? validateText({String? value, String? fieldName}) =>
+      Validators.validateText(
+          value: value, fieldName: fieldName, allowNumbers: true);
+
+  String? validatePublicationYear(String? value) =>
+      Validators.validateYear(value);
 
   // On saved methods
   void onSavedInstitutionType(String? value) {
@@ -217,6 +225,9 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
 
   void onSavedUsed(bool? value) {
     state = state.copyWith(used: value);
+    if (value == false) {
+      state = state.copyWith(damaged: value);
+    }
   }
 
   void onSavedDamaged(bool? value) {
@@ -271,7 +282,7 @@ class AddTextbookState {
     this.yearOfPublication,
     this.name,
     this.subject,
-    this.used,
+    this.used = false,
     this.damaged,
     this.price,
     this.pictures,

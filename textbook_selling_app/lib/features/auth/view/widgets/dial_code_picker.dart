@@ -22,7 +22,7 @@ class DialCodePicker extends ConsumerWidget {
 
     return Expanded(
       child: CustomDropdownMenu<dynamic>(
-        title: 'Dial Code',
+        labelText: 'Dial Code',
         items: countries,
         defaultItem: defaultItem,
         searchLabel: 'Search Countries',

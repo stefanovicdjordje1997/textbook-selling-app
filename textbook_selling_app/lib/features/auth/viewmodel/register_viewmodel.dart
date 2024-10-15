@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:textbook_selling_app/core/utils/create_route.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
 import 'package:textbook_selling_app/core/utils/auth_service.dart';
-import 'package:textbook_selling_app/features/home/view/screens/home.dart';
 
 // StateNotifier
 class RegisterViewModel extends StateNotifier<RegisterState> {
@@ -70,7 +68,8 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   // Validators
   String? validateEmail(String? value) => Validators.validateEmail(value);
-  String? validateText(String? value) => Validators.validateText(value);
+  String? validateText({String? value, String? fieldName}) =>
+      Validators.validateText(value: value, fieldName: fieldName);
   String? validatePhoneNumber(String? value) =>
       Validators.validatePhoneNumber(value);
 
@@ -148,11 +147,6 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             profilePhoto: state.pickedImageFile);
         if (context.mounted) {
           hideLoader(context);
-          Navigator.pushReplacement(
-              context,
-              createRoute(
-                  page: const HomeScreen(),
-                  animationType: RouteAnimationType.fade));
         }
       } catch (error) {
         if (context.mounted) {
