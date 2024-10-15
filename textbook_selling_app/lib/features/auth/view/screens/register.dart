@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
-import 'package:textbook_selling_app/features/auth/view/widgets/auth_redirection.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/date_picker.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/dial_code_picker.dart';
@@ -120,9 +119,6 @@ class RegisterScreen extends ConsumerWidget {
                   text: 'Register',
                 ),
                 const SizedBox(height: 20),
-                const CustomRichText(
-                  authType: AuthType.register,
-                )
               ],
             ),
           ),

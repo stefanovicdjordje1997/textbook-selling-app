@@ -147,6 +147,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             profilePhoto: state.pickedImageFile);
         if (context.mounted) {
           hideLoader(context);
+          Navigator.of(context).pop();
         }
       } catch (error) {
         if (context.mounted) {

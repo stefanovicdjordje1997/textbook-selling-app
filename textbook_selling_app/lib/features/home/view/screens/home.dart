@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/utils/create_route.dart';
+import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
 import 'package:textbook_selling_app/features/home/viewmodel/home_viewmodel.dart';
 
@@ -17,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    hideLoader(context);
     final viewModel = ref.watch(homeViewModelProvider.notifier);
     final currentIndex = ref.watch(homeViewModelProvider).index;
 

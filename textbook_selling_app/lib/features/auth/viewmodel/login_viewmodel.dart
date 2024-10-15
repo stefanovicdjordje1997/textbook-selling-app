@@ -31,9 +31,6 @@ class LoginViewModel extends StateNotifier<LoginState> {
       try {
         await AuthService.loginUser(
             email: state.email, password: state.password);
-        if (context.mounted) {
-          hideLoader(context);
-        }
         // Go to home page
       } catch (error) {
         if (context.mounted) {

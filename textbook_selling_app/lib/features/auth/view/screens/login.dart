@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
-import 'package:textbook_selling_app/features/auth/view/widgets/auth_redirection.dart';
+import 'package:textbook_selling_app/features/auth/view/widgets/register_redirection.dart';
 import 'package:textbook_selling_app/features/auth/viewModel/login_viewmodel.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -54,7 +54,7 @@ class LoginScreen extends ConsumerWidget {
                         text: 'Login',
                       ),
                       const SizedBox(height: 20),
-                      const CustomRichText(authType: AuthType.login)
+                      const CustomRichText(),
                     ],
                   ),
                 ),
