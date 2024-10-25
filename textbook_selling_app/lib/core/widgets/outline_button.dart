@@ -8,7 +8,7 @@ class CustomOutlinedButton extends StatelessWidget {
     required this.label,
   });
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Icon icon;
   final String label;
 

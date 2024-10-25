@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/dropdown_menu.dart';
+import 'package:textbook_selling_app/core/widgets/photo_gallery.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/widgets/switch.dart';
 import 'package:textbook_selling_app/features/add_textbook/viewmodel/add_textbook_viewmodel.dart';
@@ -32,6 +34,20 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
     final used = ref.watch(addTextbookViewModelProvider).used;
     final damaged = ref.watch(addTextbookViewModelProvider).damaged;
 
+    List<XFile> images = [];
+
+    void onImageAdded(XFile image) {
+      setState(() {
+        images.add(image);
+      });
+    }
+
+    void onImageRemoved(XFile image) {
+      setState(() {
+        images.remove(image);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Textbook'),
@@ -45,7 +61,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    // Wrap the educational institution fields in a Card or Container with a border
+                    // Wrap the educational institution fields in a Card
                     Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -179,7 +195,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           children: [
                             const Text(
@@ -213,6 +229,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                             CustomTextFormField(
                               labelText: 'Publication year',
                               hintText: 'Enter publication year',
+                              keyboardType: TextInputType.number,
                               validator: viewModel.validatePublicationYear,
                               onSaved: viewModel.onSavedSubject,
                             ),
@@ -233,6 +250,16 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    PhotoGallery(
+                      onImageAdded: (image) {
+                        onImageAdded(image);
+                      },
+                      onImageRemoved: (image) {
+                        onImageRemoved(image);
+                      },
+                      images: images,
+                    ),
 
                     const SizedBox(height: 80),
                   ],
@@ -240,30 +267,34 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.surface.withOpacity(0.9),
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+          if (MediaQuery.of(context).viewInsets.bottom == 0.0)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.surface.withOpacity(0.9),
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: CustomButton(
-        onPressed: () {
-          viewModel.saveForm(context);
-        },
-        text: 'Add Textbook',
+      floatingActionButton: Visibility(
+        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+        child: CustomButton(
+          onPressed: () {
+            viewModel.saveForm(context);
+          },
+          text: 'Add Textbook',
+        ),
       ),
     );
   }

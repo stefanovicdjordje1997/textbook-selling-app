@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/utils/loader_functions.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 
@@ -32,15 +30,12 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   }
 
   void getUniversities(BuildContext context) async {
-    showLoader(context);
-
     _universitiesRaw = [];
     _institutionData = await _ref
         .child(state.institutionType == 'Fakultet'
             ? 'faculties'
             : 'higher_schools')
         .get();
-    if (context.mounted) hideLoader(context);
     if (_institutionData != null && _institutionData!.exists) {
       List<String> universities = [];
 
@@ -265,7 +260,7 @@ class AddTextbookState {
   final bool? used;
   final bool? damaged;
   final double? price;
-  final List<File>? pictures;
+  final List<XFile>? pictures;
 
   // Constructor
   AddTextbookState({
@@ -306,7 +301,7 @@ class AddTextbookState {
     bool? used,
     bool? damaged,
     double? price,
-    List<File>? pictures,
+    List<XFile>? pictures,
   }) {
     return AddTextbookState(
       universities: universities ?? this.universities,
