@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/utils/auth_service.dart';
+import 'package:textbook_selling_app/core/services/auth_service.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';

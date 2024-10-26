@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:textbook_selling_app/core/viewmodels/photo_gallery_viewmodel.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/dropdown_menu.dart';
 import 'package:textbook_selling_app/core/widgets/photo_gallery.dart';
@@ -20,6 +20,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
   void deactivate() {
     // Reset state of the provider before dispose
     ref.invalidate(addTextbookViewModelProvider);
+    ref.invalidate(photoGalleryProvider);
 
     super.deactivate();
   }
@@ -33,20 +34,6 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
     final majors = ref.watch(addTextbookViewModelProvider).majors;
     final used = ref.watch(addTextbookViewModelProvider).used;
     final damaged = ref.watch(addTextbookViewModelProvider).damaged;
-
-    List<XFile> images = [];
-
-    void onImageAdded(XFile image) {
-      setState(() {
-        images.add(image);
-      });
-    }
-
-    void onImageRemoved(XFile image) {
-      setState(() {
-        images.remove(image);
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -252,15 +239,10 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                     ),
                     const SizedBox(height: 20),
                     PhotoGallery(
-                      onImageAdded: (image) {
-                        onImageAdded(image);
-                      },
-                      onImageRemoved: (image) {
-                        onImageRemoved(image);
-                      },
-                      images: images,
+                      onImageAdded: (image) {},
+                      onImageRemoved: (image) {},
+                      images: [],
                     ),
-
                     const SizedBox(height: 80),
                   ],
                 ),

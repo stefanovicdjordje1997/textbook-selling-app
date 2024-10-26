@@ -9,7 +9,7 @@ import 'package:riverpod/riverpod.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
-import 'package:textbook_selling_app/core/utils/auth_service.dart';
+import 'package:textbook_selling_app/core/services/auth_service.dart';
 
 // StateNotifier
 class RegisterViewModel extends StateNotifier<RegisterState> {
