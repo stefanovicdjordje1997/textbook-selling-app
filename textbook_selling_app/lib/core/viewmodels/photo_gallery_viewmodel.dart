@@ -17,7 +17,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
     } else {
       if (pickedImages.isNotEmpty) {
         for (var image in pickedImages) {
-          ImageRepository.addImage(image); // Dodaj slike u repozitorijum
+          ImageRepository.addImage(image);
         }
         state = state.copyWith(images: [...state.images, ...pickedImages]);
       }
@@ -52,6 +52,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
   }
 
   void doneReordering() {
+    ImageRepository.setImages(state.images);
     state = state.copyWith(
       isReordering: false,
       selectedImageIndex: null,

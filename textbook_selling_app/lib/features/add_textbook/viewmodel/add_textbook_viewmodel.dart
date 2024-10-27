@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textbook_selling_app/core/repository/image_repository.dart';
+import 'package:textbook_selling_app/core/services/textbook_service.dart';
+import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/utils/snack_bar.dart';
 import 'package:textbook_selling_app/core/utils/validators.dart';
 
@@ -153,6 +157,8 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   String? validatePublicationYear(String? value) =>
       Validators.validateYear(value);
 
+  String? validatePrice(String? value) => Validators.validatePrice(value);
+
   // On saved methods
   void onSavedInstitutionType(String? value) {
     state = state.copyWith(
@@ -218,6 +224,10 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     state = state.copyWith(subject: value);
   }
 
+  void onSavedDescription(String? value) {
+    state = state.copyWith(description: value);
+  }
+
   void onSavedUsed(bool? value) {
     state = state.copyWith(used: value);
     if (value == false) {
@@ -229,8 +239,8 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     state = state.copyWith(damaged: value);
   }
 
-  void onSavedPrice(double? value) {
-    state = state.copyWith(price: value);
+  void onSavedPrice(String? value) {
+    state = state.copyWith(price: double.tryParse(value!));
   }
 
   // Form validation
@@ -239,6 +249,48 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   void saveForm(BuildContext context) async {
     if (validateForm()) {
       formKey.currentState?.save();
+
+      showLoader(context);
+
+      try {
+        await TextbookService.addTextbook(
+          university: state.selectedUniversity,
+          institutionType: state.institutionType,
+          institution: state.selectedInstitution,
+          degreeLevel: state.selectedDegreeLevel,
+          major: state.selectedMajor,
+          yearOfStudy: state.yearOfStudy,
+          yearOfPublication: state.yearOfPublication,
+          name: state.name,
+          subject: state.subject,
+          description: state.description,
+          used: state.used,
+          damaged: state.damaged,
+          price: state.price,
+          images: ImageRepository.images,
+        );
+
+        if (context.mounted) {
+          hideLoader(context);
+          Navigator.of(context).pop();
+        }
+      } catch (error) {
+        if (context.mounted) {
+          hideLoader(context);
+
+          if (error is FirebaseException) {
+            showSnackBar(
+                context: context,
+                message: error.message ?? 'Unknown error.',
+                type: SnackBarType.error);
+          } else {
+            showSnackBar(
+                context: context,
+                message: 'Error adding textbook. Try again.',
+                type: SnackBarType.error);
+          }
+        }
+      }
     }
   }
 }
@@ -257,6 +309,7 @@ class AddTextbookState {
   final int? yearOfPublication;
   final String? name;
   final String? subject;
+  final String? description;
   final bool? used;
   final bool? damaged;
   final double? price;
@@ -277,8 +330,9 @@ class AddTextbookState {
     this.yearOfPublication,
     this.name,
     this.subject,
+    this.description,
     this.used = false,
-    this.damaged,
+    this.damaged = false,
     this.price,
     this.pictures,
   });
@@ -298,6 +352,7 @@ class AddTextbookState {
     int? yearOfPublication,
     String? name,
     String? subject,
+    String? description,
     bool? used,
     bool? damaged,
     double? price,
@@ -317,6 +372,7 @@ class AddTextbookState {
       yearOfPublication: yearOfPublication ?? this.yearOfPublication,
       name: name ?? this.name,
       subject: subject ?? this.subject,
+      description: description ?? this.description,
       used: used ?? this.used,
       damaged: damaged ?? this.damaged,
       price: price ?? this.price,

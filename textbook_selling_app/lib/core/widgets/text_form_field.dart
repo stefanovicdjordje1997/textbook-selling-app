@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.capitalFirstLetter = false,
+    this.maxLines = 2,
   });
   final String labelText;
   final String hintText;
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final bool capitalFirstLetter;
+  final int maxLines;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -63,6 +65,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           : TextCapitalization.none,
       validator: widget.validator,
       onSaved: widget.onSaved,
+      minLines: 1,
+      maxLines: widget.maxLines,
     );
   }
 }
