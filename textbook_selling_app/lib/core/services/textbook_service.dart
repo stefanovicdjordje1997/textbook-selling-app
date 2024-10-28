@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textbook_selling_app/core/models/textbook.dart';
+import 'package:textbook_selling_app/core/models/user.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -80,7 +82,60 @@ class TextbookService {
         'addedBy': user.uid,
         'createdAt': FieldValue.serverTimestamp(),
       });
-    } catch (e) {
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<List<TextBook>> getAllTextbooks() async {
+    try {
+      // Dohvati sve dokumente iz kolekcije 'textbooks'
+      QuerySnapshot snapshot = await _firestore.collection('textbooks').get();
+      List<TextBook> textbooks = [];
+
+      // Iteriraj kroz svaki dokument
+      for (var doc in snapshot.docs) {
+        // Dobij informacije o korisniku koji je dodao knjigu
+        String userId = doc['addedBy'];
+        DocumentSnapshot userDoc =
+            await _firestore.collection('users').doc(userId).get();
+
+        User user = User(
+          userDoc['name'],
+          userDoc['surname'],
+          userDoc['email'],
+          userDoc['dateOfBirth'] != null
+              ? DateTime.parse(userDoc['dateOfBirth'])
+              : null,
+          userDoc['phoneNumber'],
+          userDoc['profilePhotoURL'],
+        );
+
+        // Kreiraj TextBook objekat
+        TextBook textbook = TextBook(
+          user: user,
+          createdAt: (doc['createdAt'] as Timestamp).toDate(),
+          damaged: doc['damaged'],
+          degreeLevel: doc['degreeLevel'],
+          description: doc['description'],
+          imageUrls: List<String>.from(doc['imageUrls']),
+          institution: doc['institution'],
+          institutionType: doc['institutionType'],
+          major: doc['major'],
+          name: doc['name'],
+          price: (doc['price'] as num).toDouble(),
+          subject: doc['subject'],
+          university: doc['university'],
+          used: doc['used'],
+          yearOfPublication: doc['yearOfPublication'],
+          yearOfStudy: doc['yearOfStudy'],
+        );
+
+        // Dodaj TextBook objekat u listu
+        textbooks.add(textbook);
+      }
+      return textbooks;
+    } on FirebaseException {
       rethrow;
     }
   }

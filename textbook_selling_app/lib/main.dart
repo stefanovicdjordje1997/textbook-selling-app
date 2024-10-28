@@ -35,7 +35,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      locale: currentLocale, // Postavljamo trenutni jezik
+      locale: currentLocale,
       supportedLocales: const [
         Locale('en'),
         Locale('sr'),

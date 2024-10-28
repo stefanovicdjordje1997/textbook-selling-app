@@ -5,13 +5,14 @@ import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
+import 'package:textbook_selling_app/features/all_textbooks/view/screens/all_textbooks.dart';
 import 'package:textbook_selling_app/features/home/viewmodel/home_viewmodel.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   final List<Widget> _tabs = const [
-    TabContent(title: 'All ads will be shown here.'),
+    AllTextbooksScreen(),
     TabContent(title: 'Favorite ads will be shown here.'),
     SizedBox.shrink(),
     TabContent(title: 'Your ads will be shown here.'),
@@ -20,13 +21,20 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<String> tabNames = [
+      AppLocalizations.getString(LocalKeys.allAds),
+      AppLocalizations.getString(LocalKeys.favorites),
+      '',
+      AppLocalizations.getString(LocalKeys.yourAds),
+      AppLocalizations.getString(LocalKeys.profile)
+    ];
     hideLoader(context);
     final viewModel = ref.watch(homeViewModelProvider.notifier);
     final currentIndex = ref.watch(homeViewModelProvider).index;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.getString(LocalKeys.home)),
+        title: Text(tabNames[currentIndex ?? 0]),
         actions: [
           IconButton(
             onPressed: () => viewModel.logout(context),
@@ -51,11 +59,12 @@ class HomeScreen extends ConsumerWidget {
         onTap: viewModel.onTabSelected,
         items: [
           BottomNavigationBarItem(
-              icon: const Icon(Icons.book),
-              label: AppLocalizations.getString(LocalKeys.allAds)),
+            icon: const Icon(Icons.book),
+            label: tabNames[0],
+          ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.favorite),
-            label: AppLocalizations.getString(LocalKeys.favorites),
+            label: tabNames[1],
           ),
           // Empty space for floating button
           const BottomNavigationBarItem(
@@ -64,11 +73,11 @@ class HomeScreen extends ConsumerWidget {
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.list),
-            label: AppLocalizations.getString(LocalKeys.yourAds),
+            label: tabNames[3],
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
-            label: AppLocalizations.getString(LocalKeys.profile),
+            label: tabNames[4],
           ),
         ],
         type: BottomNavigationBarType.fixed,
