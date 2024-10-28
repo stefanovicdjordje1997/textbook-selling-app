@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+import 'package:textbook_selling_app/core/localization/language_notifier.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/register_redirection.dart';
@@ -13,14 +17,31 @@ class LoginScreen extends ConsumerWidget {
     final viewModel = ref.watch(loginViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.getString(LocalKeys.login)),
+        actions: [
+          TextButton(
+            onPressed: () {
+              ref.read(languageProvider.notifier).toggleLanguage();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(ref.watch(languageProvider).languageCode),
+                const SizedBox(width: 8),
+                const Icon(Icons.language),
+              ],
+            ),
+          ),
+        ],
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'lib/core/assets/images/login_image.png',
+                Paths.loginImage,
                 height: 300,
                 width: double.infinity,
               ),
@@ -32,16 +53,20 @@ class LoginScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       CustomTextFormField(
-                        labelText: 'Email',
-                        hintText: 'email@example.com',
+                        labelText:
+                            AppLocalizations.getString(LocalKeys.emailLabel),
+                        hintText:
+                            AppLocalizations.getString(LocalKeys.emailHint),
                         validator: viewModel.validateEmail,
                         onSaved: viewModel.onSavedEmail,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 10),
                       CustomTextFormField(
-                        labelText: 'Password',
-                        hintText: 'Minimum 6 characters',
+                        labelText:
+                            AppLocalizations.getString(LocalKeys.passwordLabel),
+                        hintText:
+                            AppLocalizations.getString(LocalKeys.passwordHint),
                         validator: viewModel.validatePassword,
                         onSaved: viewModel.onSavedPassword,
                         obscureText: true,
@@ -51,7 +76,7 @@ class LoginScreen extends ConsumerWidget {
                         onPressed: () {
                           viewModel.saveForm(context);
                         },
-                        text: 'Login',
+                        text: AppLocalizations.getString(LocalKeys.login),
                       ),
                       const SizedBox(height: 20),
                       const CustomRichText(),

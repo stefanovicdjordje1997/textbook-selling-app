@@ -3,13 +3,18 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
-import 'package:textbook_selling_app/core/utils/snack_bar.dart';
-import 'package:textbook_selling_app/core/utils/validators.dart';
+import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
+import 'package:textbook_selling_app/core/validation/validators.dart';
 
-const List<String> _institutionTypes = ['Fakultet', 'Visoka skola'];
+List<String> _institutionTypes = [
+  AppLocalizations.getString(LocalKeys.faculty),
+  AppLocalizations.getString(LocalKeys.higherSchool)
+];
 final _ref = FirebaseDatabase.instance.ref();
 const List<String> _emptyStringList = [];
 const String _emptyString = '';
@@ -36,7 +41,8 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   void getUniversities(BuildContext context) async {
     _universitiesRaw = [];
     _institutionData = await _ref
-        .child(state.institutionType == 'Fakultet'
+        .child(state.institutionType ==
+                AppLocalizations.getString(LocalKeys.faculty)
             ? 'faculties'
             : 'higher_schools')
         .get();
@@ -56,7 +62,8 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
       if (context.mounted) {
         showSnackBar(
             context: context,
-            message: 'Error getting data. Try again later.',
+            message:
+                AppLocalizations.getString(LocalKeys.gettingDataErrorMessage),
             type: SnackBarType.error);
       }
     }
@@ -138,7 +145,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   // Validators
   String? validateInstitutionType(String? value) =>
       !_institutionTypes.contains(value)
-          ? 'Please select a Institution type'
+          ? AppLocalizations.getString(LocalKeys.validateEmptyInstitutionType)
           : null;
 
   String? validateDropdownField(
@@ -281,12 +288,14 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
           if (error is FirebaseException) {
             showSnackBar(
                 context: context,
-                message: error.message ?? 'Unknown error.',
+                message: error.message ??
+                    AppLocalizations.getString(LocalKeys.unknownErrorMessage),
                 type: SnackBarType.error);
           } else {
             showSnackBar(
                 context: context,
-                message: 'Error adding textbook. Try again.',
+                message: AppLocalizations.getString(
+                    LocalKeys.addTextbookErrorMessage),
                 type: SnackBarType.error);
           }
         }

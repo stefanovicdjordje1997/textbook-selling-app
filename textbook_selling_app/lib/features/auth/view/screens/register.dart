@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/features/auth/view/widgets/date_picker.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
@@ -15,7 +17,11 @@ class RegisterScreen extends ConsumerWidget {
     final viewModel = ref.watch(registerViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.getString(LocalKeys.register),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: viewModel.formKey,
@@ -35,13 +41,17 @@ class RegisterScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: CustomTextFormField(
-                        labelText: 'Name',
-                        hintText: 'John',
+                        labelText:
+                            AppLocalizations.getString(LocalKeys.nameLabel),
+                        hintText:
+                            AppLocalizations.getString(LocalKeys.nameHint),
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
                         validator: (value) {
                           return viewModel.validateText(
-                              value: value, fieldName: 'Name');
+                              value: value,
+                              fieldName: AppLocalizations.getString(
+                                  LocalKeys.nameLabel));
                         },
                         onSaved: viewModel.onSavedName,
                       ),
@@ -49,13 +59,17 @@ class RegisterScreen extends ConsumerWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: CustomTextFormField(
-                        labelText: 'Surname',
-                        hintText: 'Doe',
+                        labelText:
+                            AppLocalizations.getString(LocalKeys.surnameLabel),
+                        hintText:
+                            AppLocalizations.getString(LocalKeys.surnameHint),
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
                         validator: (value) {
                           return viewModel.validateText(
-                              value: value, fieldName: 'Surname');
+                              value: value,
+                              fieldName: AppLocalizations.getString(
+                                  LocalKeys.surnameLabel));
                         },
                         onSaved: viewModel.onSavedSurname,
                       ),
@@ -64,24 +78,27 @@ class RegisterScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                  labelText: 'Email',
-                  hintText: 'email@example.com',
+                  labelText: AppLocalizations.getString(LocalKeys.emailLabel),
+                  hintText: AppLocalizations.getString(LocalKeys.emailHint),
                   validator: viewModel.validateEmail,
                   onSaved: viewModel.onSavedEmail,
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                  labelText: 'Password',
-                  hintText: 'Minimum 6 characters',
+                  labelText:
+                      AppLocalizations.getString(LocalKeys.passwordLabel),
+                  hintText: AppLocalizations.getString(LocalKeys.passwordHint),
                   validator: viewModel.validatePassword,
                   onSaved: viewModel.onSavedPassword,
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                  labelText: 'Repeat password',
-                  hintText: 'Repeat your password',
+                  labelText:
+                      AppLocalizations.getString(LocalKeys.repeatPasswordLabel),
+                  hintText:
+                      AppLocalizations.getString(LocalKeys.repeatPasswordHint),
                   validator: viewModel.validateRepeatedPassword,
                   onSaved: (value) {},
                   obscureText: true,
@@ -102,8 +119,10 @@ class RegisterScreen extends ConsumerWidget {
                     const SizedBox(width: 10),
                     Expanded(
                       child: CustomTextFormField(
-                        labelText: 'Phone number',
-                        hintText: '612345678',
+                        labelText:
+                            AppLocalizations.getString(LocalKeys.phoneLabel),
+                        hintText:
+                            AppLocalizations.getString(LocalKeys.phoneHint),
                         keyboardType: TextInputType.number,
                         validator: viewModel.validatePhoneNumber,
                         onSaved: viewModel.onSavePhoneNumber,
@@ -116,7 +135,7 @@ class RegisterScreen extends ConsumerWidget {
                   onPressed: () {
                     viewModel.saveForm(context);
                   },
-                  text: 'Register',
+                  text: AppLocalizations.getString(LocalKeys.register),
                 ),
                 const SizedBox(height: 20),
               ],

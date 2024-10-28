@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/widgets/outline_button.dart';
 import 'package:textbook_selling_app/features/auth/viewModel/register_viewmodel.dart';
 
@@ -80,7 +82,7 @@ class ProfileImagePicker extends ConsumerWidget {
               Icons.camera_alt_rounded,
               color: Theme.of(context).colorScheme.onSurface,
             ),
-            label: 'Take picture',
+            label: AppLocalizations.getString(LocalKeys.takePictureButton),
           ),
           const SizedBox(width: 10),
           // Button for opening the gallery
@@ -90,7 +92,7 @@ class ProfileImagePicker extends ConsumerWidget {
               Icons.image,
               color: Theme.of(context).colorScheme.onSurface,
             ),
-            label: 'Choose image',
+            label: AppLocalizations.getString(LocalKeys.pickFromGalleryButton),
           ),
         ],
       ),

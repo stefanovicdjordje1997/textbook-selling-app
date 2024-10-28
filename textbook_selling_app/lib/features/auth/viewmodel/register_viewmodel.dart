@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
-import 'package:textbook_selling_app/core/utils/validators.dart';
-import 'package:textbook_selling_app/core/utils/snack_bar.dart';
+import 'package:textbook_selling_app/core/validation/validators.dart';
+import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/services/auth_service.dart';
 
 // StateNotifier
@@ -21,8 +24,7 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   // Get data with countries and dial codes
   Future<void> loadCountries() async {
-    String data =
-        await rootBundle.loadString('lib/core/assets/country_codes.json');
+    String data = await rootBundle.loadString(Paths.countryCodes);
     List<dynamic> items = jsonDecode(data);
 
     final serbia = items.firstWhere(
@@ -83,14 +85,15 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
   String? validateRepeatedPassword(String? value) {
     if (state.password != value) {
-      return 'The repeated password doesn\'t match';
+      return AppLocalizations.getString(
+          LocalKeys.validatorInvalidRepeatedPassword);
     }
     return null;
   }
 
   String? validateDate(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please select a date';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyDateOfBirth);
     }
     return null;
   }
@@ -156,12 +159,14 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
           if (error is FirebaseAuthException) {
             showSnackBar(
                 context: context,
-                message: error.message ?? 'Unknown error.',
+                message: error.message ??
+                    AppLocalizations.getString(LocalKeys.unknownErrorMessage),
                 type: SnackBarType.error);
           } else {
             showSnackBar(
                 context: context,
-                message: 'An error occured!',
+                message:
+                    AppLocalizations.getString(LocalKeys.anErrorOccuredMessage),
                 type: SnackBarType.error);
           }
         }

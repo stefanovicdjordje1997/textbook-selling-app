@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:textbook_selling_app/core/utils/create_route.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/features/auth/view/screens/register.dart';
 
 class CustomRichText extends StatelessWidget {
@@ -16,11 +18,11 @@ class CustomRichText extends StatelessWidget {
 
     return RichText(
       text: TextSpan(
-        text: 'Don\'t have an account? ',
+        text: AppLocalizations.getString(LocalKeys.dontHaveAnAccount),
         style: Theme.of(context).textTheme.titleMedium,
         children: [
           TextSpan(
-            text: 'Register',
+            text: AppLocalizations.getString(LocalKeys.register),
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,

@@ -1,13 +1,16 @@
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constant/regex_patterns.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+
 class Validators {
   // Email validator
   static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Email cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyEmail);
     }
-    final emailRegex =
-        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final emailRegex = RegExp(RegexPatterns.email);
     if (!emailRegex.hasMatch(value.trim())) {
-      return 'Enter a valid email';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidEmail);
     }
     return null;
   }
@@ -15,10 +18,10 @@ class Validators {
   // Password validator
   static String? validatePassword(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Password cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyPassword);
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
+      return AppLocalizations.getString(LocalKeys.validatorShortPassword);
     }
     return null;
   }
@@ -30,24 +33,26 @@ class Validators {
     bool allowNumbers = false, // Parameter to allow numbers
   }) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName cannot be empty';
+      return '$fieldName ${AppLocalizations.getString(LocalKeys.validatorEmptyText)}';
     }
 
     // Regex pattern depending on whether numbers are allowed
     final nameRegex = allowNumbers
-        ? RegExp(
-            r'^[a-zA-Z0-9\s]+(\.[a-zA-Z0-9])?$') // Letters, numbers, and initials (with .)
-        : RegExp(
-            r'^[a-zA-Z\s]+(\.?[a-zA-Z\s]*)$'); // Only letters and initials (with .)
+        ? RegExp(RegexPatterns
+            .nameAllowNumbers) // Letters, numbers, and initials (with .)
+        : RegExp(RegexPatterns
+            .nameNotAllowNumbers); // Only letters and initials (with .)
 
     if (!nameRegex.hasMatch(value.trim())) {
       return allowNumbers
-          ? 'Enter valid text (letters, numbers, or initials)'
-          : 'Enter a valid text (letters or initials)';
+          ? AppLocalizations.getString(
+              LocalKeys.validatorInvalidTextAllowNumbers)
+          : AppLocalizations.getString(
+              LocalKeys.validatorInvalidTextNotAllowNumbers);
     }
 
     if (value.trim().length < 2) {
-      return 'Too short';
+      return AppLocalizations.getString(LocalKeys.validatorShortText);
     }
 
     return null;
@@ -56,11 +61,11 @@ class Validators {
   // Phone number validator
   static String? validatePhoneNumber(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Phone number cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyPhoneNumber);
     }
-    final phoneRegex = RegExp(r'^[0-9]{4,14}$');
+    final phoneRegex = RegExp(RegexPatterns.phoneNumber);
     if (!phoneRegex.hasMatch(value.trim())) {
-      return 'Enter a valid phone number';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidPhoneNumber);
     }
     return null;
   }
@@ -68,17 +73,17 @@ class Validators {
   // Year validator
   static String? validateYear(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Year cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyYear);
     }
 
     final year = int.tryParse(value.trim());
     if (year == null) {
-      return 'Enter a valid number';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidNumber);
     }
 
     final currentYear = DateTime.now().year;
     if (year < 1900 || year > currentYear) {
-      return 'Enter a valid year between 1900 and $currentYear';
+      return "${AppLocalizations.getString(LocalKeys.validatorInvalidYear)} $currentYear";
     }
 
     return null;
@@ -87,16 +92,16 @@ class Validators {
   // Price validator
   static String? validatePrice(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Price cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyPrice);
     }
 
     final price = double.tryParse(value.trim());
     if (price == null) {
-      return 'Enter a valid number';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidPrice);
     }
 
     if (price <= 0) {
-      return 'Price must be greater than zero';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidPrice);
     }
 
     return null;
@@ -105,16 +110,16 @@ class Validators {
   // Year of study validator
   static String? validateYearOfStudy(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Study year cannot be empty';
+      return AppLocalizations.getString(LocalKeys.validatorEmptyYearOfStudy);
     }
 
     final year = int.tryParse(value.trim());
 
     if (year == null) {
-      return 'Enter a valid number';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidNumber);
     }
     if (year < 1 || year > 6) {
-      return 'Enter a valid study year between 1 and 6';
+      return AppLocalizations.getString(LocalKeys.validatorInvalidYearOfStudy);
     }
 
     return null;
@@ -128,7 +133,7 @@ class Validators {
         return null;
       }
       if (value == null || value.isEmpty) {
-        return 'Please select a $fieldName';
+        return '${AppLocalizations.getString(LocalKeys.validatorEmptyDropdown)} $fieldName';
       }
       return null;
     }

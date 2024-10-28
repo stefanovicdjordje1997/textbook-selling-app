@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/viewmodels/photo_gallery_viewmodel.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/widgets/education_institution_informations.dart';
@@ -32,7 +34,9 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Textbook'),
+        title: Text(
+          AppLocalizations.getString(LocalKeys.addTextbook),
+        ),
       ),
       body: Stack(
         children: [
@@ -80,7 +84,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
           onPressed: () {
             viewModel.saveForm(context);
           },
-          text: 'Add Textbook',
+          text: AppLocalizations.getString(LocalKeys.addTextbook),
         ),
       ),
     );

@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:textbook_selling_app/core/utils/snack_bar.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/viewmodels/photo_gallery_viewmodel.dart';
 import 'package:textbook_selling_app/core/widgets/outline_button.dart';
 
@@ -72,10 +74,11 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                         ),
                         const SizedBox(
                             height: 10), // Adds space between icon and text
-                        const Text('No photos'),
+                        Text(AppLocalizations.getString(LocalKeys.noPhotos)),
                         const SizedBox(height: 5),
                         Text(
-                          "The first image will appear as the cover photo on the listing. To reorder images, hold on any image to access the options.",
+                          AppLocalizations.getString(
+                              LocalKeys.noPhotosDescription),
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
@@ -234,7 +237,9 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                     bottom: 10,
                     child: ElevatedButton(
                       onPressed: viewModel.doneReordering,
-                      child: const Text('Done'),
+                      child: Text(
+                        AppLocalizations.getString(LocalKeys.doneButton),
+                      ),
                     ),
                   ),
               ],
@@ -268,7 +273,8 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                       onPressed:
                           images.length < 6 ? viewModel.takePicture : null,
                       icon: const Icon(Icons.camera_alt),
-                      label: 'Take Picture',
+                      label: AppLocalizations.getString(
+                          LocalKeys.takePictureButton),
                     ),
                     CustomOutlinedButton(
                       onPressed: images.length < 6
@@ -285,12 +291,13 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                             }
                           : null,
                       icon: const Icon(Icons.photo),
-                      label: 'Pick from Gallery',
+                      label: AppLocalizations.getString(
+                          LocalKeys.pickFromGalleryButton),
                     ),
                   ],
                 )
-              : const Text(
-                  'Use arrows to change the order of the photo.',
+              : Text(
+                  AppLocalizations.getString(LocalKeys.changeOrderDescription),
                   textAlign: TextAlign.center,
                 ),
         ],

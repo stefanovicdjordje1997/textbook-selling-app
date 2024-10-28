@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 
 class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
   PhotoGalleryViewModel() : super(PhotoGalleryState(images: []));
@@ -13,7 +15,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
     final isPickedMoreThanMax = state.images.length + pickedImages.length > 6;
 
     if (isPickedMoreThanMax) {
-      return 'You can only select up to 6 images.';
+      return AppLocalizations.getString(LocalKeys.imageLimitMessage);
     } else {
       if (pickedImages.isNotEmpty) {
         for (var image in pickedImages) {

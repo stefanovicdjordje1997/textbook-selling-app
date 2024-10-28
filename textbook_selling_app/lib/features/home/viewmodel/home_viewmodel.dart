@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/services/auth_service.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
-import 'package:textbook_selling_app/core/utils/snack_bar.dart';
+import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 
 class HomeViewModel extends StateNotifier<HomeState> {
   HomeViewModel() : super(HomeState());
@@ -26,12 +28,14 @@ class HomeViewModel extends StateNotifier<HomeState> {
         if (error is FirebaseAuthException) {
           showSnackBar(
               context: context,
-              message: error.message ?? 'Unknown error.',
+              message: error.message ??
+                  AppLocalizations.getString(LocalKeys.unknownErrorMessage),
               type: SnackBarType.error);
         } else {
           showSnackBar(
               context: context,
-              message: 'An error occured!',
+              message:
+                  AppLocalizations.getString(LocalKeys.anErrorOccuredMessage),
               type: SnackBarType.error);
         }
       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:textbook_selling_app/core/constant/paths.dart';
 
 class Loader extends StatefulWidget {
   const Loader({super.key});
@@ -46,7 +47,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
           // Centered GIF Loader
           Center(
             child: Image.asset(
-              'lib/core/assets/images/loader_animation.gif',
+              Paths.loaderAnimation,
             ),
           ),
         ],

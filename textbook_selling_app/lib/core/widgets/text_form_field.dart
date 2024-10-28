@@ -66,7 +66,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       validator: widget.validator,
       onSaved: widget.onSaved,
       minLines: 1,
-      maxLines: widget.maxLines,
+      maxLines: _obscureText ? 1 : widget.maxLines,
     );
   }
 }
