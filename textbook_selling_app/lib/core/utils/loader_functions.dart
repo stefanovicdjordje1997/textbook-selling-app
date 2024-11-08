@@ -8,7 +8,7 @@ void showLoader(BuildContext context) {
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return const Loader();
+      return const Loader(backgroundDimPercentage: 0.5);
     },
   );
 }

@@ -41,17 +41,17 @@ class RegisterScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: CustomTextFormField(
-                        labelText:
-                            AppLocalizations.getString(LocalKeys.nameLabel),
+                        labelText: AppLocalizations.getString(
+                            LocalKeys.firstNameLabel),
                         hintText:
-                            AppLocalizations.getString(LocalKeys.nameHint),
+                            AppLocalizations.getString(LocalKeys.firstNameHint),
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
                         validator: (value) {
                           return viewModel.validateText(
                               value: value,
                               fieldName: AppLocalizations.getString(
-                                  LocalKeys.nameLabel));
+                                  LocalKeys.firstNameLabel));
                         },
                         onSaved: viewModel.onSavedName,
                       ),
@@ -60,16 +60,16 @@ class RegisterScreen extends ConsumerWidget {
                     Expanded(
                       child: CustomTextFormField(
                         labelText:
-                            AppLocalizations.getString(LocalKeys.surnameLabel),
+                            AppLocalizations.getString(LocalKeys.lastNameLabel),
                         hintText:
-                            AppLocalizations.getString(LocalKeys.surnameHint),
+                            AppLocalizations.getString(LocalKeys.lastNameHint),
                         keyboardType: TextInputType.name,
                         capitalFirstLetter: true,
                         validator: (value) {
                           return viewModel.validateText(
                               value: value,
                               fieldName: AppLocalizations.getString(
-                                  LocalKeys.surnameLabel));
+                                  LocalKeys.lastNameLabel));
                         },
                         onSaved: viewModel.onSavedSurname,
                       ),

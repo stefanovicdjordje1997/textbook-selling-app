@@ -71,10 +71,10 @@ class LocalKeys {
   static const passwordHint = 'passwordHint';
   static const repeatPasswordLabel = 'repeatPasswordLabel';
   static const repeatPasswordHint = 'repeatPasswordHint';
-  static const nameLabel = 'nameLabel';
-  static const nameHint = 'nameHint';
-  static const surnameLabel = 'surnameLabel';
-  static const surnameHint = 'surnameHint';
+  static const firstNameLabel = 'firstNameLabel';
+  static const firstNameHint = 'firstNameHint';
+  static const lastNameLabel = 'lastNameLabel';
+  static const lastNameHint = 'lastNameHint';
   static const dateOfBirthLabel = 'dateOfBirthLabel';
   static const dateOfBirthHint = 'dateOfBirthHint';
   static const dialCodeLabel = 'dialCodeLabel';

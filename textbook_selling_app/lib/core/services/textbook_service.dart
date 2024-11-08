@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
+import 'package:textbook_selling_app/core/models/textbook_response.dart';
 import 'package:textbook_selling_app/core/models/user.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -87,15 +88,41 @@ class TextbookService {
     }
   }
 
-  static Future<List<TextBook>> getAllTextbooks() async {
+  static Future<TextbooksResponse> getAllTextbooks({
+    required int page,
+    required int limit,
+  }) async {
     try {
-      // Dohvati sve dokumente iz kolekcije 'textbooks'
-      QuerySnapshot snapshot = await _firestore.collection('textbooks').get();
+      // Prvo dohvati ukupan broj elemenata za proračunavanje broja strana
+      AggregateQuerySnapshot countSnapshot =
+          await _firestore.collection('textbooks').count().get();
+      int totalItems = countSnapshot.count ?? 0;
+
+      // Proračunaj ukupan broj strana
+      int totalPages = (totalItems / limit).ceil();
+
+      Query query = _firestore
+          .collection('textbooks')
+          .orderBy('createdAt') // Order by creation date
+          .limit(limit);
+
+      // Apply startAfterDocument only if not on the first page
+      if (page > 0) {
+        // Get the last document of the previous page
+        QuerySnapshot previousPageSnapshot =
+            await query.limit(page * limit).get();
+        if (previousPageSnapshot.docs.isNotEmpty) {
+          DocumentSnapshot lastDocument = previousPageSnapshot.docs.last;
+          query = query.startAfterDocument(lastDocument);
+        }
+      }
+
+      QuerySnapshot snapshot = await query.get();
+
       List<TextBook> textbooks = [];
 
-      // Iteriraj kroz svaki dokument
       for (var doc in snapshot.docs) {
-        // Dobij informacije o korisniku koji je dodao knjigu
+        // Load the user as before
         String userId = doc['addedBy'];
         DocumentSnapshot userDoc =
             await _firestore.collection('users').doc(userId).get();
@@ -111,7 +138,6 @@ class TextbookService {
           userDoc['profilePhotoURL'],
         );
 
-        // Kreiraj TextBook objekat
         TextBook textbook = TextBook(
           user: user,
           createdAt: (doc['createdAt'] as Timestamp).toDate(),
@@ -131,10 +157,15 @@ class TextbookService {
           yearOfStudy: doc['yearOfStudy'],
         );
 
-        // Dodaj TextBook objekat u listu
         textbooks.add(textbook);
       }
-      return textbooks;
+
+      return TextbooksResponse(
+        textbooks: textbooks,
+        totalItems: totalItems,
+        totalPages: totalPages,
+        currentPage: page,
+      );
     } on FirebaseException {
       rethrow;
     }

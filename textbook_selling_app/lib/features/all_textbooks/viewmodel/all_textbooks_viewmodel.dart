@@ -6,52 +6,84 @@ import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
-import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 
 class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   AllTextbooksViewModel() : super(AllTextbooksState());
 
-  Future<void> getAllTextbooks(BuildContext context) async {
-    List<TextBook> textbooks = [];
+  Future<void> fetchTextbooks({
+    required BuildContext context,
+    int page = 0,
+    int limit = 10,
+  }) async {
+    if (state.isLoading) return; // Izbegava ponovno učitavanje
 
-    showLoader(context);
+    // Prikaži loader i ažuriraj stanje
+    state = state.copyWith(isLoading: true);
+
     try {
-      textbooks = await TextbookService.getAllTextbooks();
-      if (context.mounted) {
-        hideLoader(context);
-      }
+      // Dohvati udžbenike iz servisa
+      final response =
+          await TextbookService.getAllTextbooks(page: page, limit: limit);
+
+      if (response.totalPages == page) return;
+
+      // Dodaj udžbenike u stanje
+      state = state.copyWith(
+        textbooks: [...?state.textbooks, ...response.textbooks],
+        totalItems: response.totalItems,
+        totalPages: response.totalPages,
+        currentPage: page,
+        isLoading: false,
+      );
     } catch (error) {
       if (context.mounted) {
-        hideLoader(context);
-        if (error is FirebaseException) {
-          showSnackBar(
-            context: context,
-            message: error.message ??
-                AppLocalizations.getString(LocalKeys.unknownErrorMessage),
-            type: SnackBarType.error,
-          );
-        } else {
-          showSnackBar(
-            context: context,
-            message:
-                AppLocalizations.getString(LocalKeys.anErrorOccuredMessage),
-            type: SnackBarType.error,
-          );
-        }
+        showSnackBar(
+          context: context,
+          message: error is FirebaseException
+              ? error.message ??
+                  AppLocalizations.getString(LocalKeys.unknownErrorMessage)
+              : AppLocalizations.getString(LocalKeys.anErrorOccuredMessage),
+          type: SnackBarType.error,
+        );
       }
+      state = state.copyWith(isLoading: false);
     }
-    state = state.copyWith(textbooks: textbooks);
+  }
+
+  Future<void> refreshTextbooks(BuildContext context) async {
+    state = AllTextbooksState(); // Resetuje stanje
+    await fetchTextbooks(context: context); // Ponovno učitavanje
   }
 }
 
 class AllTextbooksState {
   final List<TextBook>? textbooks;
+  final int currentPage;
+  final int totalItems;
+  final int totalPages;
+  final bool isLoading;
 
-  AllTextbooksState({this.textbooks});
+  AllTextbooksState({
+    this.textbooks,
+    this.currentPage = 0,
+    this.totalItems = 0,
+    this.totalPages = 0,
+    this.isLoading = false,
+  });
 
-  AllTextbooksState copyWith({final List<TextBook>? textbooks}) {
+  AllTextbooksState copyWith({
+    List<TextBook>? textbooks,
+    int? currentPage,
+    int? totalItems,
+    int? totalPages,
+    bool? isLoading,
+  }) {
     return AllTextbooksState(
       textbooks: textbooks ?? this.textbooks,
+      currentPage: currentPage ?? this.currentPage,
+      totalItems: totalItems ?? this.totalItems,
+      totalPages: totalPages ?? this.totalPages,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

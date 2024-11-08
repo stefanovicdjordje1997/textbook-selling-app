@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:textbook_selling_app/core/constant/paths.dart';
 
 class Loader extends StatefulWidget {
-  const Loader({super.key});
+  const Loader(
+      {super.key, this.backgroundDimPercentage = 0.0, this.width, this.height});
+
+  final double backgroundDimPercentage;
+  final double? width;
+  final double? height;
 
   @override
   State<Loader> createState() => _LoaderState();
@@ -40,13 +45,15 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
           // Dimmed background
           Positioned.fill(
             child: ModalBarrier(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(widget.backgroundDimPercentage),
               dismissible: false,
             ),
           ),
           // Centered GIF Loader
           Center(
             child: Image.asset(
+              height: widget.height,
+              width: widget.width,
               Paths.loaderAnimation,
             ),
           ),
