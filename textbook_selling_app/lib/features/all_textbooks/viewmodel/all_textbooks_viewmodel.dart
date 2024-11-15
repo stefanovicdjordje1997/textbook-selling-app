@@ -50,9 +50,9 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
     }
   }
 
-  Future<void> refreshTextbooks(BuildContext context) async {
+  Future<void> refreshTextbooks(BuildContext context, int limit) async {
     state = AllTextbooksState(); // Resetuje stanje
-    await fetchTextbooks(context: context); // Ponovno učitavanje
+    await fetchTextbooks(context: context, limit: limit); // Ponovno učitavanje
   }
 }
 

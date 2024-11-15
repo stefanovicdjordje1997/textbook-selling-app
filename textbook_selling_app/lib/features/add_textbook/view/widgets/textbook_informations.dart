@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/widgets/card.dart';
 import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
-import 'package:textbook_selling_app/features/add_textbook/view/widgets/switch.dart';
+import 'package:textbook_selling_app/core/widgets/switch.dart';
 import 'package:textbook_selling_app/features/add_textbook/viewmodel/add_textbook_viewmodel.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/constant/local_keys.dart';

@@ -1,21 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
+import 'package:textbook_selling_app/core/services/education_institution_service.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/validation/validators.dart';
 
-List<String> _institutionTypes = [
-  AppLocalizations.getString(LocalKeys.faculty),
-  AppLocalizations.getString(LocalKeys.higherSchool)
-];
-final _ref = FirebaseDatabase.instance.ref();
 const List<String> _emptyStringList = [];
 const String _emptyString = '';
 
@@ -27,111 +22,35 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
   late AddTextbookState _initialState;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  DataSnapshot? _institutionData;
-  List<Map<dynamic, dynamic>> _universitiesRaw = [];
-  List<Map<dynamic, dynamic>> _institutionsRaw = [];
-  Map<dynamic, dynamic> _degreeLevelsRaw = {};
-
   bool hasStateChanged() => state != _initialState;
 
   get institutionTypes {
-    return _institutionTypes;
+    return EducationInstitutionService.getInstitutionTypes();
   }
 
   void getUniversities(BuildContext context) async {
-    _universitiesRaw = [];
-    _institutionData = await _ref
-        .child(state.institutionType ==
-                AppLocalizations.getString(LocalKeys.faculty)
-            ? 'faculties'
-            : 'higher_schools')
-        .get();
-    if (_institutionData != null && _institutionData!.exists) {
-      List<String> universities = [];
-
-      for (final universitySnapshot in _institutionData!.children) {
-        final universityData =
-            universitySnapshot.value as Map<dynamic, dynamic>;
-        _universitiesRaw.add(universityData);
-
-        universities.add(universityData['university']);
-      }
-
-      state = state.copyWith(universities: universities);
-    } else {
-      if (context.mounted) {
-        showSnackBar(
-            context: context,
-            message:
-                AppLocalizations.getString(LocalKeys.gettingDataErrorMessage),
-            type: SnackBarType.error);
-      }
-    }
+    List<String> universities =
+        await EducationInstitutionService.getUniversities(
+            context, state.institutionType);
+    state = state.copyWith(universities: universities);
   }
 
   void getInstitutions() {
-    _institutionsRaw = [];
-    if (state.selectedUniversity != null &&
-        state.selectedUniversity!.isNotEmpty &&
-        _universitiesRaw.isNotEmpty) {
-      List<String> institutions = [];
-
-      for (final university in _universitiesRaw) {
-        if (university['university'] == state.selectedUniversity) {
-          for (final institutionsData in university['edu_institutions']) {
-            final institutionData = institutionsData as Map<dynamic, dynamic>;
-            institutions.add(institutionData['name']);
-            _institutionsRaw.add(institutionData);
-          }
-        }
-      }
-      state = state.copyWith(institutions: institutions);
-    } else {
-      print('No data available.');
-    }
+    List<String> institutions =
+        EducationInstitutionService.getInstitutions(state.selectedUniversity);
+    state = state.copyWith(institutions: institutions);
   }
 
   void getDegreeLevels() {
-    _degreeLevelsRaw = {};
-
-    if (state.selectedInstitution != null &&
-        state.selectedInstitution!.isNotEmpty &&
-        _universitiesRaw.isNotEmpty) {
-      List<String> degreeLevels = [];
-
-      for (final institution in _institutionsRaw) {
-        if (institution['name'] == state.selectedInstitution) {
-          final degreeLevelsData =
-              institution['study_levels'] as Map<dynamic, dynamic>;
-          _degreeLevelsRaw = degreeLevelsData;
-          for (final degreeLevel in degreeLevelsData.keys) {
-            degreeLevels.add(degreeLevel);
-          }
-        }
-      }
-
-      state = state.copyWith(degreeLevels: degreeLevels);
-    } else {
-      print('No data available.');
-    }
+    List<String> degreeLevels =
+        EducationInstitutionService.getDegreeLevels(state.selectedInstitution);
+    state = state.copyWith(degreeLevels: degreeLevels);
   }
 
   void getMajors() {
-    if (state.selectedDegreeLevel != null &&
-        state.selectedDegreeLevel!.isNotEmpty &&
-        _degreeLevelsRaw.isNotEmpty) {
-      List<String> majors = [];
-      for (final majorData in _degreeLevelsRaw.entries) {
-        if (majorData.key == state.selectedDegreeLevel) {
-          for (final major in majorData.value) {
-            majors.add(major.toString());
-          }
-        }
-        state = state.copyWith(majors: majors);
-      }
-    } else {
-      print('No data available.');
-    }
+    List<String> majors =
+        EducationInstitutionService.getMajors(state.selectedDegreeLevel);
+    state = state.copyWith(majors: majors);
   }
 
   String? setSearchLabel(List<String>? data, String? label) {
@@ -144,7 +63,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
 
   // Validators
   String? validateInstitutionType(String? value) =>
-      !_institutionTypes.contains(value)
+      !institutionTypes.contains(value)
           ? AppLocalizations.getString(LocalKeys.validateEmptyInstitutionType)
           : null;
 

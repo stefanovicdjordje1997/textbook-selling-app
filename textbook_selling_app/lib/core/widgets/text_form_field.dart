@@ -5,6 +5,7 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     required this.labelText,
     required this.hintText,
+    this.defaultText,
     required this.validator,
     required this.onSaved,
     this.keyboardType = TextInputType.text,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatefulWidget {
   });
   final String labelText;
   final String hintText;
+  final String? defaultText;
   final String? Function(String? value) validator;
   final void Function(String? value) onSaved;
   final TextInputType keyboardType;
@@ -27,16 +29,19 @@ class CustomTextFormField extends StatefulWidget {
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late bool _obscureText;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
+    _controller = TextEditingController(text: widget.defaultText);
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: _controller,
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,

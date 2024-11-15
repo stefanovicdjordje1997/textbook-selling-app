@@ -33,15 +33,6 @@ class HomeScreen extends ConsumerWidget {
     final currentIndex = ref.watch(homeViewModelProvider).index;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(tabNames[currentIndex ?? 0]),
-        actions: [
-          IconButton(
-            onPressed: () => viewModel.logout(context),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
       body: _tabs[currentIndex ?? 0],
       floatingActionButton: FloatingActionButton(
         onPressed: () {

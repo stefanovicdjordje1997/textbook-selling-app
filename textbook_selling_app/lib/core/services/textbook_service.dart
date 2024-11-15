@@ -103,7 +103,7 @@ class TextbookService {
 
       Query query = _firestore
           .collection('textbooks')
-          .orderBy('createdAt') // Order by creation date
+          .orderBy('createdAt', descending: true) // Order by creation date
           .limit(limit);
 
       // Apply startAfterDocument only if not on the first page
