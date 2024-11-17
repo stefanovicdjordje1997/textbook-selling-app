@@ -1,17 +1,19 @@
 class User {
-  final String? name;
-  final String? surname;
-  final String? email;
-  final DateTime? dateOfBirth;
-  final String? phoneNumber;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final DateTime dateOfBirth;
+  final String phoneNumber;
   final String? profilePhoto;
+  final List<String> favorites;
 
-  User(
-    this.name,
-    this.surname,
-    this.email,
-    this.dateOfBirth,
-    this.phoneNumber,
+  User({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.dateOfBirth,
+    required this.phoneNumber,
     this.profilePhoto,
-  );
+    this.favorites = const [],
+  });
 }

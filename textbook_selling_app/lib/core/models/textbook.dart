@@ -1,6 +1,7 @@
 import 'package:textbook_selling_app/core/models/user.dart';
 
 class TextBook {
+  final String id;
   final User user;
   final DateTime createdAt;
   final bool damaged;
@@ -19,6 +20,7 @@ class TextBook {
   final int yearOfStudy;
 
   TextBook({
+    required this.id,
     required this.user,
     required this.createdAt,
     required this.damaged,

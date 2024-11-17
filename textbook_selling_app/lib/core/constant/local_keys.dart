@@ -56,6 +56,7 @@ class LocalKeys {
   static const priceHint = 'priceHint';
   static const usedLabel = 'usedLabel';
   static const damagedLabel = 'damagedLabel';
+  static const userInformationsTitle = 'userInformationsTitle';
   static const textbookPhotosTitle = 'textbookPhotosTitle';
   static const faculty = 'faculty';
   static const higherSchool = 'higherSchool';
@@ -87,4 +88,6 @@ class LocalKeys {
   static const favorites = 'favorites';
   static const yourAds = 'yourAds';
   static const profile = 'profile';
+  static const yesText = 'yesText';
+  static const noText = 'noText';
 }

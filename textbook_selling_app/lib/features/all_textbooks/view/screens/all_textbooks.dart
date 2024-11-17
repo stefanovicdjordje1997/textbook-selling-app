@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/constant/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/widgets/loader.dart';
 import 'package:textbook_selling_app/core/widgets/textbook_card.dart';
 import 'package:textbook_selling_app/features/all_textbooks/viewmodel/all_textbooks_viewmodel.dart';
+import 'package:textbook_selling_app/features/textbook_details/view/screens/textbook_details.dart';
 
 class AllTextbooksScreen extends ConsumerStatefulWidget {
   const AllTextbooksScreen({super.key});
@@ -83,7 +85,12 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
                     child: TextbookCard(
                       textbook: textbooks[index],
                       onTap: () {
-                        // Definišite akciju prilikom klika
+                        Navigator.of(context).push(
+                          createRoute(
+                              page: TextbookDetailsScreen(
+                                  textbook: textbooks[index]),
+                              animationType: RouteAnimationType.slideFromRight),
+                        );
                       },
                     ),
                   );

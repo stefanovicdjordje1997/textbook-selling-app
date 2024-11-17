@@ -127,18 +127,25 @@ class TextbookService {
         DocumentSnapshot userDoc =
             await _firestore.collection('users').doc(userId).get();
 
+        List<String> favorites = [];
+        if (userDoc['favorites'] != null) {
+          favorites = userDoc['favorites'] is List
+              ? List<String>.from(userDoc['favorites'])
+              : [];
+        }
+
         User user = User(
-          userDoc['name'],
-          userDoc['surname'],
-          userDoc['email'],
-          userDoc['dateOfBirth'] != null
-              ? DateTime.parse(userDoc['dateOfBirth'])
-              : null,
-          userDoc['phoneNumber'],
-          userDoc['profilePhotoURL'],
+          firstName: userDoc['firstName'],
+          lastName: userDoc['lastName'],
+          email: userDoc['email'],
+          dateOfBirth: DateTime.parse(userDoc['dateOfBirth']),
+          phoneNumber: userDoc['phoneNumber'],
+          profilePhoto: userDoc['profilePhotoURL'],
+          favorites: favorites,
         );
 
         TextBook textbook = TextBook(
+          id: doc.id,
           user: user,
           createdAt: (doc['createdAt'] as Timestamp).toDate(),
           damaged: doc['damaged'],
@@ -166,6 +173,68 @@ class TextbookService {
         totalPages: totalPages,
         currentPage: page,
       );
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<void> toggleFavoriteStatus(String textbookId) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      DocumentReference userRef = _firestore.collection('users').doc(user.uid);
+
+      // Check if the book is already in favorites
+      DocumentSnapshot userDoc = await userRef.get();
+      List<String> favorites = [];
+      if (userDoc['favorites'] != null) {
+        favorites = userDoc['favorites'] is List
+            ? List<String>.from(userDoc['favorites'])
+            : [];
+      }
+
+      if (favorites.contains(textbookId)) {
+        // Remove from favorites
+        favorites.remove(textbookId);
+      } else {
+        // Add to favorites
+        favorites.add(textbookId);
+      }
+
+      // Update the favorites in Firestore
+      await userRef.update({'favorites': favorites});
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<bool> isFavorite(String textbookId) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+
+      List<String> favorites = [];
+      if (userDoc['favorites'] != null) {
+        favorites = userDoc['favorites'] is List
+            ? List<String>.from(userDoc['favorites'])
+            : [];
+      }
+
+      return favorites.contains(textbookId);
     } on FirebaseException {
       rethrow;
     }

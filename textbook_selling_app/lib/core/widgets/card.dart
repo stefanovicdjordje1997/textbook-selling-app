@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class CustomCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final CrossAxisAlignment alignment;
   final double spacing;
 
   const CustomCard({
     super.key,
     required this.title,
     required this.children,
+    this.alignment = CrossAxisAlignment.center,
     this.spacing = 10.0,
   });
 
@@ -22,7 +24,7 @@ class CustomCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: alignment,
           children: [
             Text(
               title,

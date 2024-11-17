@@ -16,7 +16,7 @@ class PhotoGallery extends ConsumerStatefulWidget {
     required this.images,
   });
 
-  final List<XFile> images;
+  final List<String> images;
   final Function(XFile) onImageAdded;
   final Function(XFile) onImageRemoved;
 
@@ -36,11 +36,23 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(photoGalleryProvider.notifier);
-    final images = ref.watch(photoGalleryProvider).images;
+    final addedImages = ref.watch(photoGalleryProvider).images;
     final currentIndex = ref.watch(photoGalleryProvider).currentIndex;
     final isReordering = ref.watch(photoGalleryProvider).isReordering;
     final selectedImageIndex =
         ref.watch(photoGalleryProvider).selectedImageIndex;
+
+    // Ako su prosleđene slike, koristi ih; u suprotnom koristi viewModel
+    final isNetworkImage = widget.images.isNotEmpty;
+    final networkImages = [];
+    for (String url in widget.images) {
+      final image = Image.network(
+        url,
+        fit: BoxFit.cover,
+      );
+      networkImages.add(image);
+    }
+    final images = isNetworkImage ? networkImages : addedImages;
 
     return Container(
       padding: const EdgeInsets.all(15),
@@ -58,7 +70,6 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
             width: 300,
             child: Stack(
               children: [
-                // Show image and message when there are no images
                 if (images.isEmpty)
                   Center(
                     child: Column(
@@ -72,27 +83,24 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                               .onSurface
                               .withOpacity(0.8),
                         ),
-                        const SizedBox(
-                            height: 10), // Adds space between icon and text
+                        const SizedBox(height: 10),
                         Text(AppLocalizations.getString(LocalKeys.noPhotos)),
                         const SizedBox(height: 5),
                         Text(
                           AppLocalizations.getString(
                               LocalKeys.noPhotosDescription),
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.5)),
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withOpacity(0.5),
+                                  ),
                         ),
                       ],
                     ),
                   ),
-                // Show PageView if images exist
                 if (images.isNotEmpty)
                   PageView.builder(
                     controller: _pageController,
@@ -104,7 +112,9 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                     itemBuilder: (context, index) {
                       final image = images[index];
                       return GestureDetector(
-                        onLongPress: () => viewModel.onHoldImage(index),
+                        onLongPress: () => isNetworkImage
+                            ? null
+                            : viewModel.onHoldImage(index),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
@@ -124,11 +134,14 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                             borderRadius: BorderRadius.circular(10),
                             child: Stack(
                               children: [
-                                Image.file(
-                                  File(image.path),
-                                  fit: BoxFit.cover,
-                                ),
-                                if (!isReordering)
+                                // Prikaz slike kao NetworkImage ili File
+                                isNetworkImage
+                                    ? networkImages[index]
+                                    : Image.file(
+                                        File(image.path),
+                                        fit: BoxFit.cover,
+                                      ),
+                                if (!isReordering && !isNetworkImage)
                                   Positioned(
                                     top: 8,
                                     right: 8,
@@ -150,8 +163,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                                       ),
                                     ),
                                   ),
-                                // Icon to mark the cover photo
-                                if (index == 0)
+                                if (index == 0 && !isNetworkImage)
                                   Positioned(
                                     top: 8,
                                     left: 6,
@@ -208,7 +220,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                                   -1, _pageController), // Move left
                             ),
                           if (selectedImageIndex != null &&
-                              selectedImageIndex < images.length - 1)
+                              selectedImageIndex < addedImages.length - 1)
                             IconButton(
                               icon: Icon(
                                 Icons.arrow_right,
@@ -265,19 +277,19 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
           ),
           const SizedBox(height: 10),
           // Buttons to add images
-          !isReordering
+          !isReordering && !isNetworkImage
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CustomOutlinedButton(
                       onPressed:
-                          images.length < 6 ? viewModel.takePicture : null,
+                          addedImages.length < 6 ? viewModel.takePicture : null,
                       icon: const Icon(Icons.camera_alt),
                       label: AppLocalizations.getString(
                           LocalKeys.takePictureButton),
                     ),
                     CustomOutlinedButton(
-                      onPressed: images.length < 6
+                      onPressed: addedImages.length < 6
                           ? () async {
                               final message = await viewModel.pickImages();
                               if (message != null) {
@@ -296,10 +308,13 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                     ),
                   ],
                 )
-              : Text(
-                  AppLocalizations.getString(LocalKeys.changeOrderDescription),
-                  textAlign: TextAlign.center,
-                ),
+              : !isNetworkImage
+                  ? Text(
+                      AppLocalizations.getString(
+                          LocalKeys.changeOrderDescription),
+                      textAlign: TextAlign.center,
+                    )
+                  : const SizedBox(height: 0)
         ],
       ),
     );

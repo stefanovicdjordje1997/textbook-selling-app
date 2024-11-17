@@ -65,6 +65,8 @@
     "usedLabel": "Used",
     "damagedLabel": "Damaged",
 
+    "userInformationsTitle": "Ad owner Informations",
+
     "textbookPhotosTitle": "Textbook photos:",
 
     "faculty": "Faculty",
@@ -99,5 +101,8 @@
     "allAds": "All Ads",
     "favorites": "Favorites",
     "yourAds": "My Ads",
-    "profile": "Profile"
+    "profile": "Profile",
+
+    "yesText": "Yes",
+    "noText": "No"
   }

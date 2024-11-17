@@ -107,12 +107,12 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
     state = state.copyWith(password: value);
   }
 
-  void onSavedName(String? value) {
-    state = state.copyWith(name: value);
+  void onSavedFirstName(String? value) {
+    state = state.copyWith(firstName: value);
   }
 
-  void onSavedSurname(String? value) {
-    state = state.copyWith(surname: value);
+  void onSavedLastName(String? value) {
+    state = state.copyWith(lastName: value);
   }
 
   void onSavedDateOfBirth(DateTime? value) {
@@ -141,8 +141,8 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
       // Create new user in database (register)
       try {
         await AuthService.registerUser(
-            name: state.name,
-            surname: state.surname,
+            firstName: state.firstName,
+            lastName: state.lastName,
             dateOfBirth: state.dateOfBirth,
             phoneNumber: fullPhoneNumber,
             email: state.email,
@@ -177,8 +177,8 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
 
 // Define RegisterState
 class RegisterState {
-  final String? name;
-  final String? surname;
+  final String? firstName;
+  final String? lastName;
   final String? email;
   final String? password;
   final DateTime? dateOfBirth;
@@ -189,8 +189,8 @@ class RegisterState {
   final File? pickedImageFile;
 
   RegisterState({
-    this.name,
-    this.surname,
+    this.firstName,
+    this.lastName,
     this.email,
     this.password,
     this.dateOfBirth,
@@ -202,8 +202,8 @@ class RegisterState {
   });
 
   RegisterState copyWith({
-    String? name,
-    String? surname,
+    String? firstName,
+    String? lastName,
     String? email,
     String? password,
     DateTime? dateOfBirth,
@@ -214,8 +214,8 @@ class RegisterState {
     File? pickedImageFile,
   }) {
     return RegisterState(
-      name: name ?? this.name,
-      surname: surname ?? this.surname,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       password: password ?? this.password,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,

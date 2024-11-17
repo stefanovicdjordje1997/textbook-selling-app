@@ -53,7 +53,7 @@ class RegisterScreen extends ConsumerWidget {
                               fieldName: AppLocalizations.getString(
                                   LocalKeys.firstNameLabel));
                         },
-                        onSaved: viewModel.onSavedName,
+                        onSaved: viewModel.onSavedFirstName,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -71,7 +71,7 @@ class RegisterScreen extends ConsumerWidget {
                               fieldName: AppLocalizations.getString(
                                   LocalKeys.lastNameLabel));
                         },
-                        onSaved: viewModel.onSavedSurname,
+                        onSaved: viewModel.onSavedLastName,
                       ),
                     ),
                   ],

@@ -64,6 +64,8 @@
   "usedLabel": "Korišćeno",
   "damagedLabel": "Oštećeno",
 
+  "userInformationsTitle": "Vlasnik oglasa",
+
   "textbookPhotosTitle": "Fotografije udžbenika:",
 
   "faculty": "Faculty",
@@ -98,5 +100,8 @@
   "allAds": "Svi",
   "favorites": "Omiljeni",
   "yourAds": "Moji",
-  "profile": "Profil"
+  "profile": "Profil",
+
+  "yesText": "Da",
+  "noText": "Ne"
 }

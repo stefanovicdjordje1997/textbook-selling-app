@@ -9,8 +9,8 @@ final _storage = FirebaseStorage.instance;
 
 class AuthService {
   static Future<void> registerUser({
-    required String? name,
-    required String? surname,
+    required String? firstName,
+    required String? lastName,
     required DateTime? dateOfBirth,
     required String? phoneNumber,
     required String? email,
@@ -40,8 +40,8 @@ class AuthService {
         }
 
         await _firestore.collection('users').doc(user.uid).set({
-          'name': name,
-          'surname': surname,
+          'firstName': firstName,
+          'lastName': lastName,
           'dateOfBirth':
               dateOfBirth != null ? dateOfBirth.toIso8601String() : '',
           'phoneNumber': phoneNumber,

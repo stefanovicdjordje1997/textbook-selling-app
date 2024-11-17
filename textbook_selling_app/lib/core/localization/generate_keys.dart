@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:textbook_selling_app/core/constant/paths.dart';
 
+// To create local keys from en.json run following command:
+// dart run lib/core/localization/generate_keys.dart
+
 void main() async {
   const inputFilePath = Paths.englishLang;
   const outputFilePath = Paths.localKeys;
