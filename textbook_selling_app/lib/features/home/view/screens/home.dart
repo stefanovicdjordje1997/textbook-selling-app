@@ -6,6 +6,7 @@ import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
 import 'package:textbook_selling_app/features/all_textbooks/view/screens/all_textbooks.dart';
+import 'package:textbook_selling_app/features/favorite_textbooks/view/screens/favorite_textbooks.dart';
 import 'package:textbook_selling_app/features/home/viewmodel/home_viewmodel.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -13,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
 
   final List<Widget> _tabs = const [
     AllTextbooksScreen(),
-    TabContent(title: 'Favorite ads will be shown here.'),
+    FavoriteTextbooksScreen(),
     SizedBox.shrink(),
     TabContent(title: 'Your ads will be shown here.'),
     TabContent(title: 'Your profile will be shown here.'),

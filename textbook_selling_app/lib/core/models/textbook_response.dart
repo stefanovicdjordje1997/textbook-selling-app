@@ -1,7 +1,7 @@
 import 'package:textbook_selling_app/core/models/textbook.dart';
 
 class TextbooksResponse {
-  final List<TextBook> textbooks;
+  final List<Textbook> textbooks;
   final int totalItems;
   final int totalPages;
   final int currentPage;

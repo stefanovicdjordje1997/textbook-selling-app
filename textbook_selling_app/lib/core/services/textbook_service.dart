@@ -119,7 +119,7 @@ class TextbookService {
 
       QuerySnapshot snapshot = await query.get();
 
-      List<TextBook> textbooks = [];
+      List<Textbook> textbooks = [];
 
       for (var doc in snapshot.docs) {
         // Load the user as before
@@ -144,7 +144,7 @@ class TextbookService {
           favorites: favorites,
         );
 
-        TextBook textbook = TextBook(
+        Textbook textbook = Textbook(
           id: doc.id,
           user: user,
           createdAt: (doc['createdAt'] as Timestamp).toDate(),
@@ -173,6 +173,89 @@ class TextbookService {
         totalPages: totalPages,
         currentPage: page,
       );
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<List<Textbook>> getFavoriteTextbooks() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      // Dohvati korisnika i njegove omiljene knjige
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+
+      List<String> favoriteIds = [];
+      if (userDoc['favorites'] != null) {
+        favoriteIds = userDoc['favorites'] is List
+            ? List<String>.from(userDoc['favorites'])
+            : [];
+      }
+
+      if (favoriteIds.isEmpty) {
+        return [];
+      }
+
+      // Dohvati knjige na osnovu omiljenih ID-ova
+      QuerySnapshot snapshot = await _firestore
+          .collection('textbooks')
+          .where(FieldPath.documentId, whereIn: favoriteIds)
+          .get();
+
+      List<Textbook> favoriteTextbooks = [];
+      for (var doc in snapshot.docs) {
+        // Učitaj podatke o korisniku koji je dodao udžbenik
+        String userId = doc['addedBy'];
+        DocumentSnapshot textbookUserDoc =
+            await _firestore.collection('users').doc(userId).get();
+
+        List<String> favorites = [];
+        if (textbookUserDoc['favorites'] != null) {
+          favorites = textbookUserDoc['favorites'] is List
+              ? List<String>.from(textbookUserDoc['favorites'])
+              : [];
+        }
+
+        User textbookUser = User(
+          firstName: textbookUserDoc['firstName'],
+          lastName: textbookUserDoc['lastName'],
+          email: textbookUserDoc['email'],
+          dateOfBirth: DateTime.parse(textbookUserDoc['dateOfBirth']),
+          phoneNumber: textbookUserDoc['phoneNumber'],
+          profilePhoto: textbookUserDoc['profilePhotoURL'],
+          favorites: favorites,
+        );
+
+        // Dodaj knjigu sa korisničkim podacima
+        favoriteTextbooks.add(Textbook(
+          id: doc.id,
+          user: textbookUser,
+          createdAt: (doc['createdAt'] as Timestamp).toDate(),
+          damaged: doc['damaged'],
+          degreeLevel: doc['degreeLevel'],
+          description: doc['description'],
+          imageUrls: List<String>.from(doc['imageUrls']),
+          institution: doc['institution'],
+          institutionType: doc['institutionType'],
+          major: doc['major'],
+          name: doc['name'],
+          price: (doc['price'] as num).toDouble(),
+          subject: doc['subject'],
+          university: doc['university'],
+          used: doc['used'],
+          yearOfPublication: doc['yearOfPublication'],
+          yearOfStudy: doc['yearOfStudy'],
+        ));
+      }
+
+      return favoriteTextbooks;
     } on FirebaseException {
       rethrow;
     }

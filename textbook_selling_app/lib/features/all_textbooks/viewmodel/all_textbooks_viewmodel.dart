@@ -57,7 +57,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
 }
 
 class AllTextbooksState {
-  final List<TextBook>? textbooks;
+  final List<Textbook>? textbooks;
   final int currentPage;
   final int totalItems;
   final int totalPages;
@@ -72,7 +72,7 @@ class AllTextbooksState {
   });
 
   AllTextbooksState copyWith({
-    List<TextBook>? textbooks,
+    List<Textbook>? textbooks,
     int? currentPage,
     int? totalItems,
     int? totalPages,

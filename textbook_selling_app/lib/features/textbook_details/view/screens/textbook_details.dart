@@ -14,9 +14,11 @@ class TextbookDetailsScreen extends ConsumerStatefulWidget {
   const TextbookDetailsScreen({
     super.key,
     required this.textbook,
+    this.showFavoriteButton = true,
   });
 
-  final TextBook textbook;
+  final Textbook textbook;
+  final bool showFavoriteButton;
 
   @override
   ConsumerState createState() => _TextbookDetailsScreenState();
@@ -51,10 +53,11 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
         ),
         centerTitle: true,
         actions: [
-          FavoriteButton(
-            isFavorite: isFavorite,
-            onPressed: () => viewModel.toggleFavorite(textbook),
-          ),
+          if (widget.showFavoriteButton)
+            FavoriteButton(
+              isFavorite: isFavorite,
+              onPressed: () => viewModel.toggleFavorite(textbook),
+            ),
         ],
       ),
       body: SingleChildScrollView(
@@ -62,7 +65,7 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            UserInfoCard(user: user),
+            UserInfoCard(user: user!),
             const SizedBox(height: 20),
             PhotoGallery(
                 images: textbook.imageUrls,

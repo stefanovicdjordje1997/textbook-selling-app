@@ -1,8 +1,8 @@
 import 'package:textbook_selling_app/core/models/user.dart';
 
-class TextBook {
+class Textbook {
   final String id;
-  final User user;
+  final User? user;
   final DateTime createdAt;
   final bool damaged;
   final String degreeLevel;
@@ -19,9 +19,9 @@ class TextBook {
   final int yearOfPublication;
   final int yearOfStudy;
 
-  TextBook({
+  Textbook({
     required this.id,
-    required this.user,
+    this.user,
     required this.createdAt,
     required this.damaged,
     required this.degreeLevel,

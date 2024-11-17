@@ -5,12 +5,12 @@ import 'package:textbook_selling_app/core/services/textbook_service.dart';
 class TextbookDetailsViewModel extends StateNotifier<TextbookDetailsState> {
   TextbookDetailsViewModel() : super(TextbookDetailsState());
 
-  Future<void> loadFavoriteStatus(TextBook textbook) async {
+  Future<void> loadFavoriteStatus(Textbook textbook) async {
     bool favorite = await TextbookService.isFavorite(textbook.id);
     state = state.copyWith(isFavorite: favorite);
   }
 
-  Future<void> toggleFavorite(TextBook textbook) async {
+  Future<void> toggleFavorite(Textbook textbook) async {
     await TextbookService.toggleFavoriteStatus(textbook.id);
     state = state.copyWith(isFavorite: !state.isFavorite);
   }

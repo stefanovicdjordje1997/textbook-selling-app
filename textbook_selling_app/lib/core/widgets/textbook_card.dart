@@ -6,10 +6,12 @@ class TextbookCard extends StatelessWidget {
     super.key,
     required this.textbook,
     required this.onTap,
+    this.onRemove,
   });
 
-  final TextBook textbook;
+  final Textbook textbook;
   final VoidCallback onTap;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -89,19 +91,33 @@ class TextbookCard extends StatelessWidget {
                       ),
                       const Spacer(),
 
-                      // Price tag
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          "${textbook.price.toStringAsFixed(2)} RSD",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
+                      // Price and optional remove button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${textbook.price.toStringAsFixed(2)} RSD",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          if (onRemove != null)
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete_outline,
                                 color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
                               ),
-                        ),
+                              onPressed: () {
+                                if (onRemove != null) {
+                                  onRemove!();
+                                }
+                              },
+                            ),
+                        ],
                       ),
                     ],
                   ),
