@@ -4,7 +4,7 @@ class Paths {
   static const serbianLang = 'lib/core/localization/langs/sr.json';
   static const englishLang = 'lib/core/localization/langs/en.json';
   static const countryCodes = 'lib/core/assets/country_codes.json';
-  static const localKeys = 'lib/core/constant/local_keys.dart';
+  static const localKeys = 'lib/core/constants/local_keys.dart';
 
   static String getLangPath({required String languageCode}) {
     return 'lib/core/localization/langs/$languageCode.json';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/constants/paths.dart';
 
 class AppLocalizations {
   final Locale locale;

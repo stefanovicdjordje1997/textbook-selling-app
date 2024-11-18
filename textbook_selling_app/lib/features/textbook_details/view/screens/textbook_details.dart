@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/widgets/photo_gallery.dart';
@@ -10,15 +10,25 @@ import 'package:textbook_selling_app/features/textbook_details/view/widgets/sect
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/user_info_card.dart';
 import 'package:textbook_selling_app/features/textbook_details/viewmodel/textbook_details_viewmodel.dart';
 
+enum TextbookDetailsContext {
+  favorites,
+  myTextbooks,
+  general,
+}
+
 class TextbookDetailsScreen extends ConsumerStatefulWidget {
   const TextbookDetailsScreen({
     super.key,
     required this.textbook,
-    this.showFavoriteButton = true,
+    this.context = TextbookDetailsContext.general,
+    this.onEdit,
+    this.onDelete,
   });
 
   final Textbook textbook;
-  final bool showFavoriteButton;
+  final TextbookDetailsContext context;
+  final void Function(Textbook textbook)? onEdit;
+  final void Function(Textbook textbook)? onDelete;
 
   @override
   ConsumerState createState() => _TextbookDetailsScreenState();
@@ -53,11 +63,23 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
         ),
         centerTitle: true,
         actions: [
-          if (widget.showFavoriteButton)
+          if (widget.context == TextbookDetailsContext.favorites)
             FavoriteButton(
               isFavorite: isFavorite,
               onPressed: () => viewModel.toggleFavorite(textbook),
             ),
+          if (widget.context == TextbookDetailsContext.myTextbooks) ...[
+            IconButton(
+              icon: const Icon(Icons.edit),
+              color: Theme.of(context).colorScheme.primary,
+              onPressed: () => widget.onEdit?.call(textbook),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              color: Theme.of(context).colorScheme.primary,
+              onPressed: () => widget.onDelete?.call(textbook),
+            ),
+          ],
         ],
       ),
       body: SingleChildScrollView(
@@ -68,9 +90,10 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
             UserInfoCard(user: user!),
             const SizedBox(height: 20),
             PhotoGallery(
-                images: textbook.imageUrls,
-                onImageAdded: (image) {},
-                onImageRemoved: (image) {}),
+              images: textbook.imageUrls,
+              onImageAdded: (image) {},
+              onImageRemoved: (image) {},
+            ),
             const SizedBox(height: 20),
             SectionCard(
               title: AppLocalizations.getString(

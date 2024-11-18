@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/widgets/loader.dart';
@@ -88,7 +88,9 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
                         Navigator.of(context).push(
                           createRoute(
                               page: TextbookDetailsScreen(
-                                  textbook: textbooks[index]),
+                                textbook: textbooks[index],
+                                context: TextbookDetailsContext.favorites,
+                              ),
                               animationType: RouteAnimationType.slideFromRight),
                         );
                       },

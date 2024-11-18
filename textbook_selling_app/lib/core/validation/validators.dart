@@ -1,5 +1,5 @@
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
-import 'package:textbook_selling_app/core/constant/regex_patterns.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/regex_patterns.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 
 class Validators {

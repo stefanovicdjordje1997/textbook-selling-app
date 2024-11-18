@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
-import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/paths.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/localization/language_notifier.dart';
 import 'package:textbook_selling_app/core/widgets/button.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/constants/paths.dart';
 
 // To create local keys from en.json run following command:
 // dart run lib/core/localization/generate_keys.dart

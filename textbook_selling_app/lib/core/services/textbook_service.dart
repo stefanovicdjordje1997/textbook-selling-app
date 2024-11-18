@@ -322,4 +322,168 @@ class TextbookService {
       rethrow;
     }
   }
+
+  static Future<List<Textbook>> getMyTextbooks() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      // Dohvati korisnika i njegove dodane knjige
+      QuerySnapshot snapshot = await _firestore
+          .collection('textbooks')
+          .where('addedBy', isEqualTo: user.uid)
+          .get();
+
+      List<Textbook> userTextbooks = [];
+      for (var doc in snapshot.docs) {
+        // Load the user who added the textbook
+        String userId = doc['addedBy'];
+        DocumentSnapshot textbookUserDoc =
+            await _firestore.collection('users').doc(userId).get();
+
+        List<String> favorites = [];
+        if (textbookUserDoc['favorites'] != null) {
+          favorites = textbookUserDoc['favorites'] is List
+              ? List<String>.from(textbookUserDoc['favorites'])
+              : [];
+        }
+
+        User textbookUser = User(
+          firstName: textbookUserDoc['firstName'],
+          lastName: textbookUserDoc['lastName'],
+          email: textbookUserDoc['email'],
+          dateOfBirth: DateTime.parse(textbookUserDoc['dateOfBirth']),
+          phoneNumber: textbookUserDoc['phoneNumber'],
+          profilePhoto: textbookUserDoc['profilePhotoURL'],
+          favorites: favorites,
+        );
+
+        // Add textbook with user data
+        userTextbooks.add(Textbook(
+          id: doc.id,
+          user: textbookUser,
+          createdAt: (doc['createdAt'] as Timestamp).toDate(),
+          damaged: doc['damaged'],
+          degreeLevel: doc['degreeLevel'],
+          description: doc['description'],
+          imageUrls: List<String>.from(doc['imageUrls']),
+          institution: doc['institution'],
+          institutionType: doc['institutionType'],
+          major: doc['major'],
+          name: doc['name'],
+          price: (doc['price'] as num).toDouble(),
+          subject: doc['subject'],
+          university: doc['university'],
+          used: doc['used'],
+          yearOfPublication: doc['yearOfPublication'],
+          yearOfStudy: doc['yearOfStudy'],
+        ));
+      }
+
+      return userTextbooks;
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<void> removeMyTextbook(String textbookId) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      // Remove textbook from Firestore
+      await _firestore.collection('textbooks').doc(textbookId).delete();
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
+  static Future<void> updateTextbook({
+    required String textbookId,
+    required String? name,
+    required String? subject,
+    required String? description,
+    required int? yearOfStudy,
+    required int? yearOfPublication,
+    required String? institutionType,
+    required String? university,
+    required String? institution,
+    required String? degreeLevel,
+    required String? major,
+    required bool? used,
+    required bool? damaged,
+    required double? price,
+    List<dynamic>? images, // Može biti lista koja sadrži i url-ove i xfile-ove
+  }) async {
+    try {
+      // Dohvati trenutnog korisnika
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      // Dohvati referencu na tekstbuk
+      DocumentReference textbookRef =
+          _firestore.collection('textbooks').doc(textbookId);
+
+      // Spremi nove slike
+      List<String> imageUrls = [];
+
+      // Razdvoji slike na url i xfile
+      for (var image in images ?? []) {
+        if (image is String && image.startsWith('http')) {
+          // Ako je url, samo ga dodaj u listu
+          imageUrls.add(image);
+        } else if (image is XFile) {
+          // Ako je xfile, mora da se upload-uje
+          File fileImage = File(image.path);
+          String imageName = fileImage.path.split('/').last;
+          final imageRef = _storage
+              .ref()
+              .child('textbook_images')
+              .child(textbookId)
+              .child(imageName);
+
+          UploadTask uploadTask = imageRef.putFile(fileImage);
+          TaskSnapshot snapshot = await uploadTask;
+          String downloadURL = await snapshot.ref.getDownloadURL();
+          imageUrls.add(downloadURL);
+        }
+      }
+
+      // Ažuriraj podatke o tekstbuku
+      await textbookRef.update({
+        'name': name ?? '',
+        'subject': subject ?? '',
+        'description': description ?? '',
+        'yearOfStudy': yearOfStudy ?? 0,
+        'yearOfPublication': yearOfPublication ?? 0,
+        'institutionType': institutionType ?? '',
+        'university': university ?? '',
+        'institution': institution ?? '',
+        'degreeLevel': degreeLevel ?? '',
+        'major': major ?? '',
+        'used': used ?? false,
+        'damaged': damaged ?? false,
+        'price': price ?? 0,
+        'imageUrls': imageUrls, // Ažuriraj slike
+      });
+    } on FirebaseException catch (e) {
+      print('Error updating textbook: $e');
+      rethrow;
+    }
+  }
 }

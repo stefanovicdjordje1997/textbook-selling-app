@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:textbook_selling_app/core/constant/paths.dart';
+import 'package:textbook_selling_app/core/constants/paths.dart';
 
 class Loader extends StatefulWidget {
   const Loader(

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
 import 'package:textbook_selling_app/core/services/education_institution_service.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';

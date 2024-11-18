@@ -5,7 +5,7 @@ import 'package:textbook_selling_app/core/widgets/text_form_field.dart';
 import 'package:textbook_selling_app/core/widgets/switch.dart';
 import 'package:textbook_selling_app/features/add_textbook/viewmodel/add_textbook_viewmodel.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
 
 class TextbookInformations extends ConsumerWidget {
   const TextbookInformations({

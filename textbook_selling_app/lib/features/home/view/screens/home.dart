@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:textbook_selling_app/core/constant/local_keys.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
@@ -8,6 +8,7 @@ import 'package:textbook_selling_app/features/add_textbook/view/screens/add_text
 import 'package:textbook_selling_app/features/all_textbooks/view/screens/all_textbooks.dart';
 import 'package:textbook_selling_app/features/favorite_textbooks/view/screens/favorite_textbooks.dart';
 import 'package:textbook_selling_app/features/home/viewmodel/home_viewmodel.dart';
+import 'package:textbook_selling_app/features/my_textbooks.dart/view/my_textbooks.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -16,7 +17,7 @@ class HomeScreen extends ConsumerWidget {
     AllTextbooksScreen(),
     FavoriteTextbooksScreen(),
     SizedBox.shrink(),
-    TabContent(title: 'Your ads will be shown here.'),
+    MyTextbooksScreen(),
     TabContent(title: 'Your profile will be shown here.'),
   ];
 
