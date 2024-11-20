@@ -19,6 +19,7 @@ class TextbookInformations extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final used = ref.watch(addTextbookViewModelProvider).used;
     final damaged = ref.watch(addTextbookViewModelProvider).damaged;
+    final textbook = ref.read(addTextbookViewModelProvider).textbook;
 
     return CustomCard(
       title: AppLocalizations.getString(LocalKeys.textbookInformationsTitle),
@@ -26,6 +27,7 @@ class TextbookInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.textbookNameLabel),
           hintText: AppLocalizations.getString(LocalKeys.textbookNameHint),
+          defaultText: textbook?.name,
           validator: (value) {
             return viewModel.validateText(
                 value: value,
@@ -37,6 +39,7 @@ class TextbookInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.subjectNameLabel),
           hintText: AppLocalizations.getString(LocalKeys.subjectNameHint),
+          defaultText: textbook?.subject,
           validator: (value) {
             return viewModel.validateText(
                 value: value,
@@ -48,6 +51,7 @@ class TextbookInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.descriptionLabel),
           hintText: AppLocalizations.getString(LocalKeys.descriptionHint),
+          defaultText: textbook?.description,
           maxLines: 5,
           validator: (value) => null,
           onSaved: viewModel.onSavedDescription,
@@ -55,6 +59,7 @@ class TextbookInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.publicationYearLabel),
           hintText: AppLocalizations.getString(LocalKeys.publicationYearHint),
+          defaultText: textbook?.yearOfPublication.toString(),
           keyboardType: TextInputType.number,
           validator: viewModel.validatePublicationYear,
           onSaved: viewModel.onSavedYearOfPublication,
@@ -62,6 +67,7 @@ class TextbookInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.priceLabel),
           hintText: AppLocalizations.getString(LocalKeys.priceHint),
+          defaultText: textbook?.price.toStringAsFixed(0),
           keyboardType: TextInputType.number,
           validator: viewModel.validatePrice,
           onSaved: viewModel.onSavedPrice,

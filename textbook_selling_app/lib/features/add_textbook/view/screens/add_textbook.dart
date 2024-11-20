@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/viewmodels/photo_gallery_viewmodel.dart';
@@ -10,8 +11,20 @@ import 'package:textbook_selling_app/features/add_textbook/view/widgets/textbook
 import 'package:textbook_selling_app/features/add_textbook/view/widgets/textbook_photos.dart';
 import 'package:textbook_selling_app/features/add_textbook/viewmodel/add_textbook_viewmodel.dart';
 
+enum TextbookMode {
+  viewOnly,
+  editing,
+}
+
 class AddTextbookScreen extends ConsumerStatefulWidget {
-  const AddTextbookScreen({super.key});
+  const AddTextbookScreen({
+    super.key,
+    this.textbook,
+    required this.mode,
+  });
+
+  final Textbook? textbook;
+  final TextbookMode mode;
 
   @override
   ConsumerState<AddTextbookScreen> createState() => _AddTextbookScreenState();
@@ -29,13 +42,25 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(addTextbookViewModelProvider.notifier)
+          .setTextbook(widget.textbook);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(addTextbookViewModelProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.getString(LocalKeys.addTextbook),
+          AppLocalizations.getString(widget.textbook == null
+              ? LocalKeys.addTextbook
+              : LocalKeys.editTextbook),
         ),
       ),
       body: Stack(
@@ -51,7 +76,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
                     const SizedBox(height: 20),
                     TextbookInformations(viewModel: viewModel),
                     const SizedBox(height: 20),
-                    const TextbookPhotos(),
+                    TextbookPhotos(mode: widget.mode),
                     const SizedBox(height: 80),
                   ],
                 ),
@@ -82,9 +107,12 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
         visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
         child: CustomButton(
           onPressed: () {
-            viewModel.saveForm(context);
+            viewModel.saveForm(
+                context: context, isEditing: widget.textbook != null);
           },
-          text: AppLocalizations.getString(LocalKeys.addTextbook),
+          text: AppLocalizations.getString(widget.textbook == null
+              ? LocalKeys.addTextbook
+              : LocalKeys.saveTextbook),
         ),
       ),
     );

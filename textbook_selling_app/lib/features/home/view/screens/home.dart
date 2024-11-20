@@ -40,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
         onPressed: () {
           // Go to add textbook screen
           Navigator.of(context).push(createRoute(
-              page: const AddTextbookScreen(),
+              page: const AddTextbookScreen(mode: TextbookMode.editing),
               animationType: RouteAnimationType.slideFromBottomAndFadeIn));
         },
         elevation: 2.0,

@@ -88,6 +88,101 @@ class TextbookService {
     }
   }
 
+  static Future<void> updateTextbook({
+    required String textbookId,
+    String? name,
+    String? subject,
+    String? description,
+    int? yearOfStudy,
+    int? yearOfPublication,
+    String? institutionType,
+    String? university,
+    String? institution,
+    String? degreeLevel,
+    String? major,
+    bool? used,
+    bool? damaged,
+    double? price,
+    List<XFile>? images,
+  }) async {
+    try {
+      // Check if the user is authenticated
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-user',
+          message: 'User not authenticated.',
+        );
+      }
+
+      // Reference to the textbook document
+      DocumentReference textbookRef =
+          _firestore.collection('textbooks').doc(textbookId);
+
+      // Check if the document exists
+      DocumentSnapshot textbookDoc = await textbookRef.get();
+      if (!textbookDoc.exists) {
+        throw FirebaseException(
+          plugin: 'FirebaseFirestore',
+          message: 'Textbook does not exist.',
+        );
+      }
+
+      // Replace old images with new ones if provided
+      List<String> newImageUrls = [];
+      if (images != null && images.isNotEmpty) {
+        // Delete existing images from Firebase Storage
+        List<dynamic> existingImageUrls = textbookDoc['imageUrls'] ?? [];
+        for (String imageUrl in existingImageUrls) {
+          try {
+            await _storage.refFromURL(imageUrl).delete();
+          } catch (e) {
+            // Log the error but continue with other images (image might not exist)
+          }
+        }
+
+        // Upload new images to Firebase Storage
+        List<File> fileImages =
+            images.map((xFile) => File(xFile.path)).toList();
+        for (File image in fileImages) {
+          String imageName = image.path.split('/').last;
+          final imageRef = _storage
+              .ref()
+              .child('textbook_images')
+              .child(textbookId)
+              .child(imageName);
+
+          UploadTask uploadTask = imageRef.putFile(image);
+          TaskSnapshot snapshot = await uploadTask;
+          String downloadURL = await snapshot.ref.getDownloadURL();
+          newImageUrls.add(downloadURL);
+          print('----------> IMAGE URL: ${downloadURL}');
+        }
+      }
+
+      // Update textbook details in Firestore
+      await textbookRef.update({
+        if (name != null) 'name': name,
+        if (subject != null) 'subject': subject,
+        if (description != null) 'description': description,
+        if (yearOfStudy != null) 'yearOfStudy': yearOfStudy,
+        if (yearOfPublication != null) 'yearOfPublication': yearOfPublication,
+        if (institutionType != null) 'institutionType': institutionType,
+        if (university != null) 'university': university,
+        if (institution != null) 'institution': institution,
+        if (degreeLevel != null) 'degreeLevel': degreeLevel,
+        if (major != null) 'major': major,
+        if (used != null) 'used': used,
+        if (damaged != null) 'damaged': damaged,
+        if (price != null) 'price': price,
+        if (images != null) 'imageUrls': newImageUrls,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } on FirebaseException {
+      rethrow;
+    }
+  }
+
   static Future<TextbooksResponse> getAllTextbooks({
     required int page,
     required int limit,
@@ -206,6 +301,7 @@ class TextbookService {
       // Dohvati knjige na osnovu omiljenih ID-ova
       QuerySnapshot snapshot = await _firestore
           .collection('textbooks')
+          .orderBy('createdAt', descending: true)
           .where(FieldPath.documentId, whereIn: favoriteIds)
           .get();
 
@@ -392,98 +488,43 @@ class TextbookService {
   }
 
   static Future<void> removeMyTextbook(String textbookId) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) {
-        throw FirebaseAuthException(
-          code: 'no-user',
-          message: 'User not authenticated.',
-        );
-      }
+    // Referenca na folder textbookId
+    Reference folderRef = FirebaseStorage.instance
+        .ref()
+        .child('textbook_images')
+        .child(textbookId);
 
-      // Remove textbook from Firestore
-      await _firestore.collection('textbooks').doc(textbookId).delete();
-    } on FirebaseException {
-      rethrow;
+    // Preuzmi sve fajlove unutar foldera
+    ListResult result = await folderRef.listAll();
+
+    // Obrisi sve fajlove
+    for (var item in result.items) {
+      try {
+        // Obrisi fajl
+        await item.delete();
+        print('Fajl ${item.name} obrisan');
+      } catch (e) {
+        print('Greška pri brisanju fajla ${item.name}: $e');
+      }
     }
-  }
 
-  static Future<void> updateTextbook({
-    required String textbookId,
-    required String? name,
-    required String? subject,
-    required String? description,
-    required int? yearOfStudy,
-    required int? yearOfPublication,
-    required String? institutionType,
-    required String? university,
-    required String? institution,
-    required String? degreeLevel,
-    required String? major,
-    required bool? used,
-    required bool? damaged,
-    required double? price,
-    List<dynamic>? images, // Može biti lista koja sadrži i url-ove i xfile-ove
-  }) async {
+    // Na kraju, obriši fajl koji predstavlja `textbookId` (ako postoji)
     try {
-      // Dohvati trenutnog korisnika
-      final user = _auth.currentUser;
-      if (user == null) {
-        throw FirebaseAuthException(
-          code: 'no-user',
-          message: 'User not authenticated.',
-        );
-      }
+      await folderRef.delete();
+      print('Folder textbook_images/$textbookId je obrisan');
+    } catch (e) {
+      print('Greška pri brisanju foldera textbook_images/$textbookId: $e');
+    }
 
-      // Dohvati referencu na tekstbuk
-      DocumentReference textbookRef =
-          _firestore.collection('textbooks').doc(textbookId);
-
-      // Spremi nove slike
-      List<String> imageUrls = [];
-
-      // Razdvoji slike na url i xfile
-      for (var image in images ?? []) {
-        if (image is String && image.startsWith('http')) {
-          // Ako je url, samo ga dodaj u listu
-          imageUrls.add(image);
-        } else if (image is XFile) {
-          // Ako je xfile, mora da se upload-uje
-          File fileImage = File(image.path);
-          String imageName = fileImage.path.split('/').last;
-          final imageRef = _storage
-              .ref()
-              .child('textbook_images')
-              .child(textbookId)
-              .child(imageName);
-
-          UploadTask uploadTask = imageRef.putFile(fileImage);
-          TaskSnapshot snapshot = await uploadTask;
-          String downloadURL = await snapshot.ref.getDownloadURL();
-          imageUrls.add(downloadURL);
-        }
-      }
-
-      // Ažuriraj podatke o tekstbuku
-      await textbookRef.update({
-        'name': name ?? '',
-        'subject': subject ?? '',
-        'description': description ?? '',
-        'yearOfStudy': yearOfStudy ?? 0,
-        'yearOfPublication': yearOfPublication ?? 0,
-        'institutionType': institutionType ?? '',
-        'university': university ?? '',
-        'institution': institution ?? '',
-        'degreeLevel': degreeLevel ?? '',
-        'major': major ?? '',
-        'used': used ?? false,
-        'damaged': damaged ?? false,
-        'price': price ?? 0,
-        'imageUrls': imageUrls, // Ažuriraj slike
-      });
-    } on FirebaseException catch (e) {
-      print('Error updating textbook: $e');
-      rethrow;
+    // Obrisi dokument iz Firestore-a
+    try {
+      await FirebaseFirestore.instance
+          .collection('textbooks') // Naziv kolekcije u Firestore-u
+          .doc(textbookId) // ID dokumenta za brisanje
+          .delete();
+      print('Dokument sa ID-jem $textbookId je obrisan iz Firestore-a');
+    } catch (e) {
+      print('Greška pri brisanju dokumenta $textbookId iz Firestore-a: $e');
     }
   }
 }

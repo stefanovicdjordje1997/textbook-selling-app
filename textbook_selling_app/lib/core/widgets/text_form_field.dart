@@ -39,6 +39,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 
   @override
+  void didUpdateWidget(covariant CustomTextFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.defaultText != oldWidget.defaultText) {
+      _controller.text = widget.defaultText ?? '';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/constants/local_keys.dart';
@@ -40,6 +41,22 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
     state = state.copyWith(
       images: [...state.images.where((img) => img.path != image.path)],
     );
+  }
+
+  Future<XFile> _getImageXFileByUrl(String url) async {
+    var file = await DefaultCacheManager().getSingleFile(url);
+    XFile result = XFile(file.path);
+    return result;
+  }
+
+  void setImages(List<String> images) async {
+    List<XFile> fileImages = [];
+    for (final image in images) {
+      XFile fileImage = await _getImageXFileByUrl(image);
+      fileImages.add(fileImage);
+    }
+    state = state.copyWith(images: fileImages);
+    ImageRepository.setImages(fileImages);
   }
 
   void onPageChanged(int index) {

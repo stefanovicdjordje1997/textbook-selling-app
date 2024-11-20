@@ -4,6 +4,7 @@ import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/widgets/photo_gallery.dart';
+import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/favorite_button.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/info_row.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/section_card.dart';
@@ -93,6 +94,7 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
               images: textbook.imageUrls,
               onImageAdded: (image) {},
               onImageRemoved: (image) {},
+              mode: TextbookMode.viewOnly,
             ),
             const SizedBox(height: 20),
             SectionCard(

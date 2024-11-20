@@ -29,6 +29,8 @@ class LocalKeys {
   static const takePictureButton = 'takePictureButton';
   static const pickFromGalleryButton = 'pickFromGalleryButton';
   static const addTextbook = 'addTextbook';
+  static const saveTextbook = 'saveTextbook';
+  static const editTextbook = 'editTextbook';
   static const educationInstitutionInformationsTitle = 'educationInstitutionInformationsTitle';
   static const institutionTypeLabel = 'institutionTypeLabel';
   static const institutionTypeSearchLabel = 'institutionTypeSearchLabel';

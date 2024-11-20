@@ -7,6 +7,7 @@ import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/viewmodels/photo_gallery_viewmodel.dart';
 import 'package:textbook_selling_app/core/widgets/outline_button.dart';
+import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
 
 class PhotoGallery extends ConsumerStatefulWidget {
   const PhotoGallery({
@@ -14,11 +15,13 @@ class PhotoGallery extends ConsumerStatefulWidget {
     required this.onImageAdded,
     required this.onImageRemoved,
     required this.images,
+    required this.mode,
   });
 
   final List<String> images;
   final Function(XFile) onImageAdded;
   final Function(XFile) onImageRemoved;
+  final TextbookMode mode;
 
   @override
   ConsumerState<PhotoGallery> createState() => _PhotoGalleryState();
@@ -27,11 +30,21 @@ class PhotoGallery extends ConsumerStatefulWidget {
 class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
   final PageController _pageController = PageController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   images = widget.images; // Initialize the image list
-  // }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.images.isNotEmpty) {
+        ref.read(photoGalleryProvider.notifier).setImages(widget.images);
+      }
+    });
+  }
+
+  @override
+  void deactivate() {
+    ref.invalidate(photoGalleryProvider);
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,9 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
         ref.watch(photoGalleryProvider).selectedImageIndex;
 
     // Ako su prosleđene slike, koristi ih; u suprotnom koristi viewModel
-    final isNetworkImage = widget.images.isNotEmpty;
+    final isViewMode = widget.mode == TextbookMode.viewOnly;
+    final isEditingMode = widget.mode == TextbookMode.editing;
+
     final networkImages = [];
     for (String url in widget.images) {
       final image = Image.network(
@@ -52,7 +67,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
       );
       networkImages.add(image);
     }
-    final images = isNetworkImage ? networkImages : addedImages;
+    final images = isViewMode ? networkImages : addedImages;
 
     return Container(
       padding: const EdgeInsets.all(15),
@@ -86,18 +101,19 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                         const SizedBox(height: 10),
                         Text(AppLocalizations.getString(LocalKeys.noPhotos)),
                         const SizedBox(height: 5),
-                        Text(
-                          AppLocalizations.getString(
-                              LocalKeys.noPhotosDescription),
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.5),
-                                  ),
-                        ),
+                        if (isEditingMode)
+                          Text(
+                            AppLocalizations.getString(
+                                LocalKeys.noPhotosDescription),
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withOpacity(0.5),
+                                    ),
+                          ),
                       ],
                     ),
                   ),
@@ -112,9 +128,8 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                     itemBuilder: (context, index) {
                       final image = images[index];
                       return GestureDetector(
-                        onLongPress: () => isNetworkImage
-                            ? null
-                            : viewModel.onHoldImage(index),
+                        onLongPress: () =>
+                            isViewMode ? null : viewModel.onHoldImage(index),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
@@ -135,13 +150,13 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                             child: Stack(
                               children: [
                                 // Prikaz slike kao NetworkImage ili File
-                                isNetworkImage
+                                isViewMode
                                     ? networkImages[index]
                                     : Image.file(
                                         File(image.path),
                                         fit: BoxFit.cover,
                                       ),
-                                if (!isReordering && !isNetworkImage)
+                                if (!isReordering && !isViewMode)
                                   Positioned(
                                     top: 8,
                                     right: 8,
@@ -163,7 +178,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                                       ),
                                     ),
                                   ),
-                                if (index == 0 && !isNetworkImage)
+                                if (index == 0 && !isViewMode)
                                   Positioned(
                                     top: 8,
                                     left: 6,
@@ -277,7 +292,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
           ),
           const SizedBox(height: 10),
           // Buttons to add images
-          !isReordering && !isNetworkImage
+          !isReordering && !isViewMode
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -308,7 +323,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                     ),
                   ],
                 )
-              : !isNetworkImage
+              : !isViewMode
                   ? Text(
                       AppLocalizations.getString(
                           LocalKeys.changeOrderDescription),

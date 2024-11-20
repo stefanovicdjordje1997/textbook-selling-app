@@ -21,6 +21,7 @@ class EducationInstitutionInformations extends ConsumerWidget {
     final institutions = ref.watch(addTextbookViewModelProvider).institutions;
     final degreeLevels = ref.watch(addTextbookViewModelProvider).degreeLevels;
     final majors = ref.watch(addTextbookViewModelProvider).majors;
+    final textbook = ref.read(addTextbookViewModelProvider).textbook;
 
     return CustomCard(
       title: AppLocalizations.getString(
@@ -31,7 +32,7 @@ class EducationInstitutionInformations extends ConsumerWidget {
           searchLabel: viewModel.setSearchLabel(viewModel.institutionTypes,
               AppLocalizations.getString(LocalKeys.institutionTypeSearchLabel)),
           items: viewModel.institutionTypes,
-          defaultItem:
+          defaultItem: textbook?.institutionType ??
               AppLocalizations.getString(LocalKeys.institutionTypeDefaultItem),
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -44,8 +45,10 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.universityLabel),
           searchLabel: viewModel.setSearchLabel(universities,
               AppLocalizations.getString(LocalKeys.universitySearchLabel)),
-          enabled: universities != null && universities.isNotEmpty,
+          enabled: (universities != null && universities.isNotEmpty) ||
+              textbook != null,
           items: universities ?? [],
+          defaultItem: textbook?.university,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -64,8 +67,10 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.eduInstitutionLabel),
           searchLabel: viewModel.setSearchLabel(institutions,
               AppLocalizations.getString(LocalKeys.eduInstitutionSearchLabel)),
-          enabled: institutions != null && institutions.isNotEmpty,
+          enabled: (institutions != null && institutions.isNotEmpty) ||
+              textbook != null,
           items: institutions ?? [],
+          defaultItem: textbook?.institution,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           itemSearchValue: (item) => item,
@@ -85,8 +90,10 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.degreeLevelLabel),
           searchLabel: viewModel.setSearchLabel(degreeLevels,
               AppLocalizations.getString(LocalKeys.degreeLevelSearchLabel)),
-          enabled: degreeLevels != null && degreeLevels.isNotEmpty,
+          enabled: (degreeLevels != null && degreeLevels.isNotEmpty) ||
+              textbook != null,
           items: degreeLevels ?? [],
+          defaultItem: textbook?.degreeLevel,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -105,8 +112,9 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.majorLabel),
           searchLabel: viewModel.setSearchLabel(
               majors, AppLocalizations.getString(LocalKeys.majorSearchLabel)),
-          enabled: majors != null && majors.isNotEmpty,
+          enabled: (majors != null && majors.isNotEmpty) || textbook != null,
           items: majors ?? [],
+          defaultItem: textbook?.major,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -122,6 +130,7 @@ class EducationInstitutionInformations extends ConsumerWidget {
         CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.yearOfStudyLabel),
           hintText: AppLocalizations.getString(LocalKeys.yearOfStudyHintText),
+          defaultText: textbook?.yearOfStudy.toString(),
           keyboardType: TextInputType.number,
           validator: viewModel.validateYearOfStudy,
           onSaved: viewModel.onSavedYearOfStudy,

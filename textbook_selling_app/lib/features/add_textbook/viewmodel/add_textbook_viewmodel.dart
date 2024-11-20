@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/repository/image_repository.dart';
 import 'package:textbook_selling_app/core/services/education_institution_service.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
@@ -169,32 +170,60 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     state = state.copyWith(price: double.tryParse(value!));
   }
 
+  void setTextbook(Textbook? textbook) {
+    state = state.copyWith(
+      textbook: textbook,
+      used: textbook?.used,
+      damaged: textbook?.damaged,
+    );
+  }
+
   // Form validation
   bool validateForm() => formKey.currentState?.validate() ?? false;
 
-  void saveForm(BuildContext context) async {
+  void saveForm({required BuildContext context, bool isEditing = false}) async {
     if (validateForm()) {
       formKey.currentState?.save();
 
       showLoader(context);
 
       try {
-        await TextbookService.addTextbook(
-          university: state.selectedUniversity,
-          institutionType: state.institutionType,
-          institution: state.selectedInstitution,
-          degreeLevel: state.selectedDegreeLevel,
-          major: state.selectedMajor,
-          yearOfStudy: state.yearOfStudy,
-          yearOfPublication: state.yearOfPublication,
-          name: state.name,
-          subject: state.subject,
-          description: state.description,
-          used: state.used,
-          damaged: state.damaged,
-          price: state.price,
-          images: ImageRepository.images,
-        );
+        if (!isEditing) {
+          await TextbookService.addTextbook(
+            university: state.selectedUniversity,
+            institutionType: state.institutionType,
+            institution: state.selectedInstitution,
+            degreeLevel: state.selectedDegreeLevel,
+            major: state.selectedMajor,
+            yearOfStudy: state.yearOfStudy,
+            yearOfPublication: state.yearOfPublication,
+            name: state.name,
+            subject: state.subject,
+            description: state.description,
+            used: state.used,
+            damaged: state.damaged,
+            price: state.price,
+            images: ImageRepository.images,
+          );
+        } else {
+          await TextbookService.updateTextbook(
+            textbookId: state.textbook!.id,
+            university: state.selectedUniversity,
+            institutionType: state.institutionType,
+            institution: state.selectedInstitution,
+            degreeLevel: state.selectedDegreeLevel,
+            major: state.selectedMajor,
+            yearOfStudy: state.yearOfStudy,
+            yearOfPublication: state.yearOfPublication,
+            name: state.name,
+            subject: state.subject,
+            description: state.description,
+            used: state.used,
+            damaged: state.damaged,
+            price: state.price,
+            images: ImageRepository.images,
+          );
+        }
 
         if (context.mounted) {
           hideLoader(context);
@@ -242,28 +271,29 @@ class AddTextbookState {
   final bool? damaged;
   final double? price;
   final List<XFile>? pictures;
+  final Textbook? textbook;
 
   // Constructor
-  AddTextbookState({
-    this.universities,
-    this.selectedUniversity,
-    this.institutionType,
-    this.institutions,
-    this.selectedInstitution,
-    this.degreeLevels,
-    this.selectedDegreeLevel,
-    this.majors,
-    this.selectedMajor,
-    this.yearOfStudy,
-    this.yearOfPublication,
-    this.name,
-    this.subject,
-    this.description,
-    this.used = false,
-    this.damaged = false,
-    this.price,
-    this.pictures,
-  });
+  AddTextbookState(
+      {this.universities,
+      this.selectedUniversity,
+      this.institutionType,
+      this.institutions,
+      this.selectedInstitution,
+      this.degreeLevels,
+      this.selectedDegreeLevel,
+      this.majors,
+      this.selectedMajor,
+      this.yearOfStudy,
+      this.yearOfPublication,
+      this.name,
+      this.subject,
+      this.description,
+      this.used = false,
+      this.damaged = false,
+      this.price,
+      this.pictures,
+      this.textbook});
 
   // Method to create a copy of the state with modified values
   AddTextbookState copyWith({
@@ -285,6 +315,7 @@ class AddTextbookState {
     bool? damaged,
     double? price,
     List<XFile>? pictures,
+    Textbook? textbook,
   }) {
     return AddTextbookState(
       universities: universities ?? this.universities,
@@ -305,6 +336,7 @@ class AddTextbookState {
       damaged: damaged ?? this.damaged,
       price: price ?? this.price,
       pictures: pictures ?? this.pictures,
+      textbook: textbook ?? this.textbook,
     );
   }
 }
