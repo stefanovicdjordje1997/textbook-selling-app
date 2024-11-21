@@ -66,6 +66,11 @@
   "usedLabel": "Korišćeno",
   "damagedLabel": "Oštećeno",
 
+  "userDataTitle": "Podaci o korisniku",
+  "email": "Email",
+  "dateOfBirth": "Datum rođenja",
+  "phoneNumber": "Broj telefona",
+
   "userInformationsTitle": "Vlasnik oglasa",
 
   "textbookPhotosTitle": "Fotografije udžbenika:",
@@ -79,7 +84,10 @@
   "addTextbookErrorMessage": "Greška prilikom dodavanja udžbenika. Pokušajte ponovo.",
 
   "login": "Prijava",
+  "logout": "Odjava",
   "register": "Registracija",
+  "cancel": "Otkaži",
+  "confirm": "Potvrdi",
   "emailLabel": "Email",
   "emailHint": "email@primer.com",
   "passwordLabel": "Lozinka",
@@ -105,5 +113,11 @@
   "profile": "Profil",
 
   "yesText": "Da",
-  "noText": "Ne"
+  "noText": "Ne",
+
+  "noFavoriteTextbooksMessage": "Nema omiljenih udžbenika. 😢",
+  "noMyTextbooksMessage": "Nema tvojih oglasa za udžbenike. 😢",
+  "areYouSure": "Jesi li siguran?",
+  "deleteConfirmationMessage": "Da li stvarno želiš da izbrišeš udžbenik?",
+  "logoutConfirmationMessage": "Da li stvarno želiš da se izloguješ?"
 }

@@ -40,9 +40,9 @@ class _FavoriteTextbooksScreenState
       body: state.isLoading
           ? const Loader()
           : state.favoriteTextbooks.isEmpty
-              ? const Center(
-                  child: Text('There is no favorite books. 😢'),
-                )
+              ? Center(
+                  child: Text(AppLocalizations.getString(
+                      LocalKeys.noFavoriteTextbooksMessage)))
               : ListView.builder(
                   padding: const EdgeInsets.only(top: 16, bottom: 30),
                   itemCount: state.favoriteTextbooks.length,

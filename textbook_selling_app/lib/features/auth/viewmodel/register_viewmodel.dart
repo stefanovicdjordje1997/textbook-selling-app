@@ -9,10 +9,12 @@ import 'package:riverpod/riverpod.dart';
 import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/constants/paths.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
+import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/utils/loader_functions.dart';
 import 'package:textbook_selling_app/core/validation/validators.dart';
 import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
 import 'package:textbook_selling_app/core/services/auth_service.dart';
+import 'package:textbook_selling_app/features/home/view/screens/home.dart';
 
 // StateNotifier
 class RegisterViewModel extends StateNotifier<RegisterState> {
@@ -150,7 +152,11 @@ class RegisterViewModel extends StateNotifier<RegisterState> {
             profilePhoto: state.pickedImageFile);
         if (context.mounted) {
           hideLoader(context);
-          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacement(
+            createRoute(
+                page: const HomeScreen(),
+                animationType: RouteAnimationType.fade),
+          );
         }
       } catch (error) {
         if (context.mounted) {

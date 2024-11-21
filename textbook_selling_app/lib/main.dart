@@ -62,8 +62,10 @@ class MyApp extends ConsumerWidget {
             }
             if (snapshot.hasData) {
               return const HomeScreen();
+            } else {
+              //return Loader();
+              return const LoginScreen();
             }
-            return const LoginScreen();
           }),
     );
   }

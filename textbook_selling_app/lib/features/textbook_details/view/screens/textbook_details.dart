@@ -6,8 +6,8 @@ import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/widgets/photo_gallery.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/favorite_button.dart';
-import 'package:textbook_selling_app/features/textbook_details/view/widgets/info_row.dart';
-import 'package:textbook_selling_app/features/textbook_details/view/widgets/section_card.dart';
+import 'package:textbook_selling_app/core/widgets/info_row.dart';
+import 'package:textbook_selling_app/core/widgets/section_card.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/widgets/user_info_card.dart';
 import 'package:textbook_selling_app/features/textbook_details/viewmodel/textbook_details_viewmodel.dart';
 

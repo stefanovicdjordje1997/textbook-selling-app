@@ -11,9 +11,7 @@ Future<void> showConfirmationDialog(BuildContext context, String title,
         title: title,
         message: message,
         onConfirm: () async {
-          await onConfirm(); // Poziva funkciju za potvrdu
-          Navigator.of(context)
-              .pop(); // Zatvori dijalog nakon što je akcija završena
+          await onConfirm();
         },
       );
     },

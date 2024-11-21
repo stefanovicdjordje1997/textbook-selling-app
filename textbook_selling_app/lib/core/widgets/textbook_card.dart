@@ -44,10 +44,10 @@ class TextbookCard extends StatelessWidget {
                       : null,
                 ),
                 child: textbook.imageUrls.isEmpty
-                    ? const Icon(
+                    ? Icon(
                         Icons.image,
                         size: 60,
-                        color: Colors.white54,
+                        color: Theme.of(context).colorScheme.surface,
                       )
                     : null,
               ),

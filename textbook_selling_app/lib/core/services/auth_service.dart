@@ -48,6 +48,7 @@ class AuthService {
           'email': email,
           'profilePhotoURL': photoURL ?? '',
           'createdAt': FieldValue.serverTimestamp(),
+          'favorites': const []
         });
       }
     } on FirebaseAuthException {

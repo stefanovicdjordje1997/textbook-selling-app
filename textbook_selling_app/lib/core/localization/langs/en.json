@@ -67,6 +67,11 @@
     "usedLabel": "Used",
     "damagedLabel": "Damaged",
 
+    "userDataTitle": "User Data",
+    "email": "Email",
+    "dateOfBirth": "Date of Birth",
+    "phoneNumber": "Phone Number",
+
     "userInformationsTitle": "Ad owner Informations",
 
     "textbookPhotosTitle": "Textbook photos:",
@@ -80,7 +85,10 @@
     "addTextbookErrorMessage": "Error adding textbook. Try again.",
     
     "login": "Login",
+    "logout": "Logout",
     "register": "Register",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "emailLabel": "Email",
     "emailHint": "email@example.com",
     "passwordLabel": "Password",
@@ -106,5 +114,11 @@
     "profile": "Profile",
 
     "yesText": "Yes",
-    "noText": "No"
+    "noText": "No",
+
+    "noFavoriteTextbooksMessage": "There is no favorite textbooks. 😢",
+    "noMyTextbooksMessage": "You haven't added any textbooks yet. 😢",
+    "areYouSure": "Are you sure?",
+    "deleteConfirmationMessage": "Do you really want to delete this item?",
+    "logoutConfirmationMessage": "Do you really want to logout?"
   }

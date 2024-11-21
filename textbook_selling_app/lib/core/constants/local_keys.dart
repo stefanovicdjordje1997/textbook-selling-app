@@ -58,6 +58,10 @@ class LocalKeys {
   static const priceHint = 'priceHint';
   static const usedLabel = 'usedLabel';
   static const damagedLabel = 'damagedLabel';
+  static const userDataTitle = 'userDataTitle';
+  static const email = 'email';
+  static const dateOfBirth = 'dateOfBirth';
+  static const phoneNumber = 'phoneNumber';
   static const userInformationsTitle = 'userInformationsTitle';
   static const textbookPhotosTitle = 'textbookPhotosTitle';
   static const faculty = 'faculty';
@@ -67,7 +71,10 @@ class LocalKeys {
   static const anErrorOccuredMessage = 'anErrorOccuredMessage';
   static const addTextbookErrorMessage = 'addTextbookErrorMessage';
   static const login = 'login';
+  static const logout = 'logout';
   static const register = 'register';
+  static const cancel = 'cancel';
+  static const confirm = 'confirm';
   static const emailLabel = 'emailLabel';
   static const emailHint = 'emailHint';
   static const passwordLabel = 'passwordLabel';
@@ -92,4 +99,9 @@ class LocalKeys {
   static const profile = 'profile';
   static const yesText = 'yesText';
   static const noText = 'noText';
+  static const noFavoriteTextbooksMessage = 'noFavoriteTextbooksMessage';
+  static const noMyTextbooksMessage = 'noMyTextbooksMessage';
+  static const areYouSure = 'areYouSure';
+  static const deleteConfirmationMessage = 'deleteConfirmationMessage';
+  static const logoutConfirmationMessage = 'logoutConfirmationMessage';
 }

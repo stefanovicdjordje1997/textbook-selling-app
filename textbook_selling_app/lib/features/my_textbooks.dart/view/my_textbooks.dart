@@ -40,8 +40,10 @@ class _UserTextbooksScreenState extends ConsumerState<MyTextbooksScreen> {
       body: state.isLoading
           ? const Loader()
           : state.userTextbooks.isEmpty
-              ? const Center(
-                  child: Text('You haven\'t added any books yet. 😢'),
+              ? Center(
+                  child: Text(
+                    AppLocalizations.getString(LocalKeys.noMyTextbooksMessage),
+                  ),
                 )
               : ListView.builder(
                   padding: const EdgeInsets.only(top: 16, bottom: 30),
@@ -60,8 +62,10 @@ class _UserTextbooksScreenState extends ConsumerState<MyTextbooksScreen> {
                                 onDelete: (textbook) {
                                   showConfirmationDialog(
                                     context,
-                                    'Are you sure?',
-                                    'Do you really want to delete this item?',
+                                    AppLocalizations.getString(
+                                        LocalKeys.areYouSure),
+                                    AppLocalizations.getString(
+                                        LocalKeys.deleteConfirmationMessage),
                                     () async {
                                       await viewModel
                                           .removeUserTextbook(textbook);
