@@ -230,6 +230,7 @@ class TextbookService {
         }
 
         User user = User(
+          id: userId,
           firstName: userDoc['firstName'],
           lastName: userDoc['lastName'],
           email: userDoc['email'],
@@ -320,6 +321,7 @@ class TextbookService {
         }
 
         User textbookUser = User(
+          id: userId,
           firstName: textbookUserDoc['firstName'],
           lastName: textbookUserDoc['lastName'],
           email: textbookUserDoc['email'],
@@ -450,6 +452,7 @@ class TextbookService {
         }
 
         User textbookUser = User(
+          id: userId,
           firstName: textbookUserDoc['firstName'],
           lastName: textbookUserDoc['lastName'],
           email: textbookUserDoc['email'],

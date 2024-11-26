@@ -23,6 +23,7 @@ class UserService {
 
       final data = userDoc.data()!;
       return User(
+        id: userDoc.id,
         firstName: data['firstName'] ?? '',
         lastName: data['lastName'] ?? '',
         email: data['email'] ?? '',
@@ -34,5 +35,27 @@ class UserService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  static String getUserId() {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-user',
+        message: 'User not authenticated.',
+      );
+    }
+    return user.uid;
+  }
+
+  static bool isUserLoggedIn(String id) {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-user',
+        message: 'User not authenticated.',
+      );
+    }
+    return user.uid == id;
   }
 }

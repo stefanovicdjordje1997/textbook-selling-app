@@ -88,7 +88,10 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            UserInfoCard(user: user!),
+            UserInfoCard(
+              user: user!,
+              showChatButton: viewModel.showChatButton(user.id),
+            ),
             const SizedBox(height: 20),
             PhotoGallery(
               images: textbook.imageUrls,

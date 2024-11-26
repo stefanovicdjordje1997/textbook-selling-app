@@ -6,6 +6,7 @@ import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/core/widgets/loader.dart';
 import 'package:textbook_selling_app/core/widgets/textbook_card.dart';
 import 'package:textbook_selling_app/features/all_textbooks/viewmodel/all_textbooks_viewmodel.dart';
+import 'package:textbook_selling_app/features/chat/view/screens/chats.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/screens/textbook_details.dart';
 
 class AllTextbooksScreen extends ConsumerStatefulWidget {
@@ -100,6 +101,18 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
               ),
             )
           : const Loader(),
+      floatingActionButton: FloatingActionButton(
+        heroTag: null,
+        onPressed: () {
+          Navigator.of(context).push(
+            createRoute(
+                page: const ChatsScreen(),
+                animationType: RouteAnimationType.slideFromRight),
+          );
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(Icons.chat),
+      ),
     );
   }
 }

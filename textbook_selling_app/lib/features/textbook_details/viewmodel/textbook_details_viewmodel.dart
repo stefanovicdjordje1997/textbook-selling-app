@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
+import 'package:textbook_selling_app/core/services/user_service.dart';
 
 class TextbookDetailsViewModel extends StateNotifier<TextbookDetailsState> {
   TextbookDetailsViewModel() : super(TextbookDetailsState());
@@ -13,6 +14,10 @@ class TextbookDetailsViewModel extends StateNotifier<TextbookDetailsState> {
   Future<void> toggleFavorite(Textbook textbook) async {
     await TextbookService.toggleFavoriteStatus(textbook.id);
     state = state.copyWith(isFavorite: !state.isFavorite);
+  }
+
+  bool showChatButton(String id) {
+    return !UserService.isUserLoggedIn(id);
   }
 }
 
