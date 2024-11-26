@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:textbook_selling_app/core/models/chat.dart';
 import 'package:textbook_selling_app/core/models/message.dart';
+import 'package:textbook_selling_app/core/services/user_service.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 class ChatService {
   // Slanje poruke
@@ -9,11 +13,9 @@ class ChatService {
     required String text,
   }) async {
     try {
-      final firestore = FirebaseFirestore.instance;
-
       // Kreiranje nove poruke
       final newMessage = Message(
-        id: firestore
+        id: _firestore
             .collection('chats')
             .doc(chatId)
             .collection('messages')
@@ -25,7 +27,7 @@ class ChatService {
       );
 
       // Ažuriranje kolekcije poruka
-      final chatRef = firestore.collection('chats').doc(chatId);
+      final chatRef = _firestore.collection('chats').doc(chatId);
       final messagesRef = chatRef.collection('messages');
 
       await messagesRef.doc(newMessage.id).set(newMessage.toMap());
@@ -46,12 +48,11 @@ class ChatService {
     required String userId2,
   }) {
     try {
-      final firestore = FirebaseFirestore.instance;
       final chatId = generateChatId(userId1, userId2);
 
       // Referenca na kolekciju poruka
       final messagesRef =
-          firestore.collection('chats').doc(chatId).collection('messages');
+          _firestore.collection('chats').doc(chatId).collection('messages');
 
       // Vraćanje stream-a koji prati promene u porukama
       return messagesRef.orderBy('timestamp').snapshots().map((querySnapshot) {
@@ -65,65 +66,52 @@ class ChatService {
     }
   }
 
-  // Dohvatanje poruka
-  static Future<List<Message>> fetchMessages({
-    required String userId1,
-    required String userId2,
-  }) async {
-    try {
-      final firestore = FirebaseFirestore.instance;
-
-      // Generisanje ID četa
-      final chatId = generateChatId(userId1, userId2);
-
-      // Reference na čet dokument i kolekciju poruka
-      final chatRef = firestore.collection('chats').doc(chatId);
-      final messagesRef = chatRef.collection('messages');
-
-      // Provera da li čet postoji
-      final chatDoc = await chatRef.get();
-      if (!chatDoc.exists) {
-        // Kreiraj čet ako ne postoji
-        await _createChat(chatId: chatId, userId1: userId1, userId2: userId2);
-        return []; // Vraća praznu listu jer još nema poruka
-      }
-
-      // Dohvatanje poruka, sortirano po vremenu slanja
-      final querySnapshot = await messagesRef.orderBy('timestamp').get();
-      return querySnapshot.docs
-          .map((doc) => Message.fromMap(doc.data()))
-          .toList();
-    } catch (e) {
-      print("Error fetching messages: $e");
-      throw Exception("Failed to fetch messages");
-    }
-  }
-
-  // Privatna pomoćna funkcija za generisanje ID četa
   static String generateChatId(String userId1, String userId2) {
     final sortedIds = [userId1, userId2]..sort();
     return '${sortedIds[0]}_${sortedIds[1]}';
   }
 
-  // Privatna funkcija za kreiranje četa
-  static Future<void> _createChat({
-    required String chatId,
+  static Future<void> createChatIfNotExists({
     required String userId1,
     required String userId2,
   }) async {
     try {
-      final firestore = FirebaseFirestore.instance;
+      final chatRef =
+          _firestore.collection('chats').doc(generateChatId(userId1, userId2));
 
-      // Kreiranje novog četa
-      await firestore.collection('chats').doc(chatId).set({
-        'users': [userId1, userId2],
-        'lastMessage': null,
-        'lastMessageTime': null,
-        'createdAt': DateTime.now(),
-      });
+      final chatDoc = await chatRef.get();
+      if (!chatDoc.exists) {
+        await chatRef.set({
+          'users': [userId1, userId2],
+          'lastMessage': null,
+          'lastMessageTime': null,
+          'createdAt': DateTime.now(),
+        });
+      }
     } catch (e) {
       print("Error creating chat: $e");
       throw Exception("Failed to create chat");
+    }
+  }
+
+  static Stream<List<Chat>> streamUserChats() {
+    try {
+      final userId = UserService.getUserId();
+
+      return _firestore
+          .collection('chats')
+          .where('users', arrayContains: userId)
+          .orderBy('lastMessageTime', descending: true)
+          .snapshots()
+          .map((querySnapshot) async {
+        final chats = await Future.wait(querySnapshot.docs
+            .map((doc) async => await Chat.fromFirestore(doc)));
+        return chats.where((chat) => chat.lastMessage != null).toList();
+      }).asyncMap((futureList) =>
+              futureList); // Pretvara Future<List> u Stream<List>
+    } catch (e) {
+      print("Error streaming user chats: $e");
+      throw Exception("Failed to stream user chats");
     }
   }
 }

@@ -16,11 +16,16 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           CircleAvatar(
             radius: 18,
-            backgroundImage: recipient.profilePhoto != null
+            backgroundColor:
+                Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            backgroundImage: recipient.profilePhoto != null &&
+                    recipient.profilePhoto!.isNotEmpty
                 ? NetworkImage(recipient.profilePhoto!)
                 : null,
-            child: recipient.profilePhoto == null
-                ? const Icon(Icons.person)
+            child: recipient.profilePhoto == null ||
+                    recipient.profilePhoto!.isEmpty
+                ? Icon(Icons.person_rounded,
+                    color: Theme.of(context).colorScheme.primary)
                 : null,
           ),
           const SizedBox(width: 8),

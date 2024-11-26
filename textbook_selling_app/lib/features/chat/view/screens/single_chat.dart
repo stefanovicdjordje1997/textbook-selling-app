@@ -27,6 +27,7 @@ class _SingleChatScreenState extends ConsumerState<SingleChatScreen> {
     super.initState();
 
     final viewModel = ref.read(chatProvider.notifier);
+    viewModel.createChat(widget.recipient.id);
     viewModel.initializeStream(widget.recipient.id);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -48,6 +48,21 @@ class UserService {
     return user.uid;
   }
 
+  static Future<User?> getUserById(String id) async {
+    try {
+      final userDoc = await _firestore.collection('users').doc(id).get();
+
+      if (!userDoc.exists) {
+        return null;
+      }
+
+      return User.fromMap({...userDoc.data()!, 'id': userDoc.id});
+    } catch (e) {
+      print("Error fetching user by ID: $e");
+      return null;
+    }
+  }
+
   static bool isUserLoggedIn(String id) {
     final user = _auth.currentUser;
     if (user == null) {

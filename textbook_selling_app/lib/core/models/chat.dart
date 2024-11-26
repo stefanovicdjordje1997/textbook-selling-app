@@ -1,37 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:textbook_selling_app/core/models/message.dart';
-import 'package:textbook_selling_app/core/models/user.dart';
 
 class Chat {
-  final String id; // ID četa
-  final List<User>
-      users; // Lista korisnika u četu (obično 2 korisnika za privatni čet)
-  final List<Message> messages; // Lista poruka, poređanih hronološki
-  final DateTime createdAt; // Datum kreiranja četa
-  final String?
-      lastMessage; // Tekst poslednje poruke za lakši prikaz u listama četa
-  final DateTime? lastMessageTime; // Vreme poslednje poruke
+  final String id;
+  final List<String> userIds;
+  final DateTime createdAt;
+  final String? lastMessage;
+  final DateTime? lastMessageTime;
 
   Chat({
     required this.id,
-    required this.users,
-    required this.messages,
+    required this.userIds,
     required this.createdAt,
     this.lastMessage,
     this.lastMessageTime,
   });
 
   // Kreiranje instance iz Firestore dokumenta
-  factory Chat.fromFirestore(DocumentSnapshot doc) {
+  static Future<Chat> fromFirestore(DocumentSnapshot doc) async {
     final data = doc.data() as Map<String, dynamic>;
+
     return Chat(
       id: doc.id,
-      users: (data['users'] as List)
-          .map((user) => User.fromMap(user as Map<String, dynamic>))
-          .toList(),
-      messages: (data['messages'] as List)
-          .map((msg) => Message.fromMap(msg as Map<String, dynamic>))
-          .toList(),
+      userIds: List<String>.from(data['users']),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       lastMessage: data['lastMessage'],
       lastMessageTime: data['lastMessageTime'] != null
@@ -40,11 +30,9 @@ class Chat {
     );
   }
 
-  // Konvertovanje instance u mapu za Firestore
   Map<String, dynamic> toMap() {
     return {
-      'users': users.map((user) => user.toMap()).toList(),
-      'messages': messages.map((msg) => msg.toMap()).toList(),
+      'users': userIds,
       'createdAt': createdAt,
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,

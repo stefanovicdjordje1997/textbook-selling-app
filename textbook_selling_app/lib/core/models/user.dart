@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class User {
   final String id;
   final String firstName;
@@ -27,9 +25,9 @@ class User {
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
-      dateOfBirth: (data['dateOfBirth'] as Timestamp).toDate(),
+      dateOfBirth: DateTime.parse(data['dateOfBirth']),
       phoneNumber: data['phoneNumber'],
-      profilePhoto: data['profilePhoto'],
+      profilePhoto: data['profilePhotoURL'],
       favorites: List<String>.from(data['favorites'] ?? []),
     );
   }

@@ -1,13 +1,39 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:textbook_selling_app/core/models/chat.dart';
 import 'package:textbook_selling_app/core/models/message.dart';
+import 'package:textbook_selling_app/core/models/user.dart';
 import 'package:textbook_selling_app/core/services/chat_service.dart';
 import 'package:textbook_selling_app/core/services/user_service.dart';
 
 class ChatViewModel extends StateNotifier<ChatState> {
   ChatViewModel() : super(ChatState());
 
-  final senderId = UserService.getUserId();
+  get senderId {
+    return UserService.getUserId();
+  }
+
+  Future<void> createChat(String recipientId) async {
+    try {
+      await ChatService.createChatIfNotExists(
+        userId1: senderId,
+        userId2: recipientId,
+      );
+    } catch (error) {
+      print("Error creating chat: $error");
+    }
+  }
+
+  Future<User?> getRecipient(Chat chat) async {
+    try {
+      final recipientId =
+          chat.userIds.firstWhere((userId) => userId != senderId);
+      return await UserService.getUserById(recipientId);
+    } catch (error) {
+      print("Error fetching recipient: $error");
+      return null;
+    }
+  }
 
   // Pokretanje stream-a za praćenje poruka
   void initializeStream(String userId2) {
@@ -82,4 +108,11 @@ class ChatState {
 
 final chatProvider = StateNotifierProvider<ChatViewModel, ChatState>(
   (ref) => ChatViewModel(),
+);
+
+final recipientProvider = FutureProvider.family<User?, Chat>(
+  (ref, chat) {
+    final chatViewModel = ref.read(chatProvider.notifier);
+    return chatViewModel.getRecipient(chat);
+  },
 );
