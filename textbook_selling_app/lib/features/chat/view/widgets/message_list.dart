@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/message.dart';
 import 'package:textbook_selling_app/features/chat/view/widgets/message_bubble.dart';
 import 'package:textbook_selling_app/features/chat/viewmodel/chat_viewmodel.dart';
@@ -18,7 +20,8 @@ class MessageList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (messages.isEmpty) {
-      return const Center(child: Text("No messages yet."));
+      return Center(
+          child: Text(AppLocalizations.getString(LocalKeys.noMessages)));
     }
 
     return ListView.builder(

@@ -5,7 +5,9 @@ import 'package:textbook_selling_app/core/constants/local_keys.dart';
 import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/textbook.dart';
 import 'package:textbook_selling_app/core/notifications/snack_bar.dart';
+import 'package:textbook_selling_app/core/services/chat_service.dart';
 import 'package:textbook_selling_app/core/services/textbook_service.dart';
+import 'package:textbook_selling_app/core/services/user_service.dart';
 
 class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   AllTextbooksViewModel() : super(AllTextbooksState());
@@ -53,6 +55,10 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   Future<void> refreshTextbooks(BuildContext context, int limit) async {
     state = AllTextbooksState(); // Resetuje stanje
     await fetchTextbooks(context: context, limit: limit); // Ponovno učitavanje
+  }
+
+  Stream<int> streamTotalUnreadMessages() {
+    return ChatService.streamTotalUnreadMessages(UserService.getUserId());
   }
 }
 

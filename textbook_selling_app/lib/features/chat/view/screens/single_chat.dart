@@ -29,10 +29,17 @@ class _SingleChatScreenState extends ConsumerState<SingleChatScreen> {
     final viewModel = ref.read(chatProvider.notifier);
     viewModel.createChat(widget.recipient.id);
     viewModel.initializeStream(widget.recipient.id);
-
+    viewModel.markMessagesAsRead(widget.recipient.id);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom(offset: 20);
     });
+  }
+
+  @override
+  void deactivate() {
+    final viewModel = ref.read(chatProvider.notifier);
+    viewModel.markMessagesAsRead(widget.recipient.id);
+    super.deactivate();
   }
 
   void _scrollToBottom({offset = 0}) {

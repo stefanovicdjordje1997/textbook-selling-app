@@ -101,17 +101,49 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
               ),
             )
           : const Loader(),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        onPressed: () {
-          Navigator.of(context).push(
-            createRoute(
-                page: const ChatsScreen(),
-                animationType: RouteAnimationType.slideFromRight),
+      floatingActionButton: StreamBuilder<int>(
+        stream: viewModel.streamTotalUnreadMessages(),
+        builder: (context, snapshot) {
+          int unreadMessages = snapshot.data ?? 0;
+
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              FloatingActionButton(
+                heroTag: null,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    createRoute(
+                        page: const ChatsScreen(),
+                        animationType: RouteAnimationType.slideFromRight),
+                  );
+                },
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: const Icon(Icons.chat),
+              ),
+              if (unreadMessages > 0)
+                Positioned(
+                  right: 7,
+                  bottom: 25,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$unreadMessages',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.chat),
       ),
     );
   }

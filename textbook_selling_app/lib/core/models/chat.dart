@@ -6,6 +6,7 @@ class Chat {
   final DateTime createdAt;
   final String? lastMessage;
   final DateTime? lastMessageTime;
+  final Map<String, int> unreadCount;
 
   Chat({
     required this.id,
@@ -13,6 +14,7 @@ class Chat {
     required this.createdAt,
     this.lastMessage,
     this.lastMessageTime,
+    required this.unreadCount,
   });
 
   // Kreiranje instance iz Firestore dokumenta
@@ -27,6 +29,7 @@ class Chat {
       lastMessageTime: data['lastMessageTime'] != null
           ? (data['lastMessageTime'] as Timestamp).toDate()
           : null,
+      unreadCount: Map<String, int>.from(data['unreadCount'] ?? {}),
     );
   }
 
@@ -36,6 +39,7 @@ class Chat {
       'createdAt': createdAt,
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
+      'unreadCount': unreadCount,
     };
   }
 }

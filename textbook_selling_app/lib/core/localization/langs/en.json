@@ -120,5 +120,13 @@
     "noMyTextbooksMessage": "You haven't added any textbooks yet. 😢",
     "areYouSure": "Are you sure?",
     "deleteConfirmationMessage": "Do you really want to delete this item?",
-    "logoutConfirmationMessage": "Do you really want to logout?"
+    "logoutConfirmationMessage": "Do you really want to logout?",
+
+    "inbox": "Inbox",
+    "message": "Type message...",
+    "loading": "Loading...",
+    "unknownUser": "Unknown User",
+    "noMessages": "No messages yet.",
+    "today": "Today",
+    "yesterday": "Yesterday"
   }

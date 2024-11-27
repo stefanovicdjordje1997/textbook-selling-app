@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 
 class MessageInput extends StatelessWidget {
   const MessageInput({
@@ -20,7 +22,7 @@ class MessageInput extends StatelessWidget {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                hintText: "Type a message...",
+                hintText: AppLocalizations.getString(LocalKeys.message),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none,

@@ -104,4 +104,11 @@ class LocalKeys {
   static const areYouSure = 'areYouSure';
   static const deleteConfirmationMessage = 'deleteConfirmationMessage';
   static const logoutConfirmationMessage = 'logoutConfirmationMessage';
+  static const inbox = 'inbox';
+  static const message = 'message';
+  static const loading = 'loading';
+  static const unknownUser = 'unknownUser';
+  static const noMessages = 'noMessages';
+  static const today = 'today';
+  static const yesterday = 'yesterday';
 }
