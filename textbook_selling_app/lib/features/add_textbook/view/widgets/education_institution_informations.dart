@@ -22,6 +22,7 @@ class EducationInstitutionInformations extends ConsumerWidget {
     final degreeLevels = ref.watch(addTextbookViewModelProvider).degreeLevels;
     final majors = ref.watch(addTextbookViewModelProvider).majors;
     final textbook = ref.read(addTextbookViewModelProvider).textbook;
+    final state = ref.watch(addTextbookViewModelProvider);
 
     return CustomCard(
       title: AppLocalizations.getString(
@@ -45,10 +46,9 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.universityLabel),
           searchLabel: viewModel.setSearchLabel(universities,
               AppLocalizations.getString(LocalKeys.universitySearchLabel)),
-          enabled: (universities != null && universities.isNotEmpty) ||
-              textbook != null,
+          enabled: universities != null && universities.isNotEmpty,
           items: universities ?? [],
-          defaultItem: textbook?.university,
+          defaultItem: state.selectedUniversity,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -67,10 +67,9 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.eduInstitutionLabel),
           searchLabel: viewModel.setSearchLabel(institutions,
               AppLocalizations.getString(LocalKeys.eduInstitutionSearchLabel)),
-          enabled: (institutions != null && institutions.isNotEmpty) ||
-              textbook != null,
+          enabled: institutions != null && institutions.isNotEmpty,
           items: institutions ?? [],
-          defaultItem: textbook?.institution,
+          defaultItem: state.selectedInstitution,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           itemSearchValue: (item) => item,
@@ -90,10 +89,9 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.degreeLevelLabel),
           searchLabel: viewModel.setSearchLabel(degreeLevels,
               AppLocalizations.getString(LocalKeys.degreeLevelSearchLabel)),
-          enabled: (degreeLevels != null && degreeLevels.isNotEmpty) ||
-              textbook != null,
+          enabled: degreeLevels != null && degreeLevels.isNotEmpty,
           items: degreeLevels ?? [],
-          defaultItem: textbook?.degreeLevel,
+          defaultItem: state.selectedDegreeLevel,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {
@@ -112,9 +110,9 @@ class EducationInstitutionInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.majorLabel),
           searchLabel: viewModel.setSearchLabel(
               majors, AppLocalizations.getString(LocalKeys.majorSearchLabel)),
-          enabled: (majors != null && majors.isNotEmpty) || textbook != null,
+          enabled: majors != null && majors.isNotEmpty,
           items: majors ?? [],
-          defaultItem: textbook?.major,
+          defaultItem: state.selectedMajor,
           shouldResetSeletion: true,
           itemDisplayValue: (item) => item,
           onSelectedItem: (item) {

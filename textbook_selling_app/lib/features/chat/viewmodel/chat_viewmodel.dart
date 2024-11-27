@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/chat.dart';
 import 'package:textbook_selling_app/core/models/message.dart';
 import 'package:textbook_selling_app/core/models/user.dart';
@@ -51,17 +53,24 @@ class ChatViewModel extends StateNotifier<ChatState> {
 
     state = state.copyWith(isLoading: true);
 
-    final chatId = ChatService.generateChatId(senderId, recipientId);
     try {
       await ChatService.sendMessage(
-        chatId: chatId,
         senderId: senderId,
+        recipientId: recipientId,
         text: text.trim(),
       );
     } catch (error) {
       print("Error sending message: $error");
     } finally {
       state = state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<void> markMessagesAsRead(String recipientId) async {
+    try {
+      await ChatService.markMessagesAsRead(recipientId, senderId);
+    } catch (error) {
+      print("Error marking messages as read: $error");
     }
   }
 
@@ -80,9 +89,9 @@ class ChatViewModel extends StateNotifier<ChatState> {
   String formatDateHeader(DateTime date) {
     final now = DateTime.now();
     if (isSameDay(date, now)) {
-      return "Today";
+      return AppLocalizations.getString(LocalKeys.today);
     } else if (isSameDay(date, now.subtract(const Duration(days: 1)))) {
-      return "Yesterday";
+      return AppLocalizations.getString(LocalKeys.yesterday);
     } else {
       return DateFormat('dd/MM/yy').format(date);
     }

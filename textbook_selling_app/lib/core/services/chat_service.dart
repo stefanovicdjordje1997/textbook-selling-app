@@ -8,11 +8,12 @@ final _firestore = FirebaseFirestore.instance;
 class ChatService {
   // Slanje poruke
   static Future<void> sendMessage({
-    required String chatId,
     required String senderId,
+    required String recipientId,
     required String text,
   }) async {
     try {
+      final chatId = generateChatId(senderId, recipientId);
       // Kreiranje nove poruke
       final newMessage = Message(
         id: _firestore
@@ -34,12 +35,30 @@ class ChatService {
 
       // Ažuriranje metapodataka četa
       await chatRef.update({
+        'unreadCount.$recipientId': FieldValue.increment(1),
         'lastMessage': newMessage.text,
         'lastMessageTime': newMessage.timestamp,
       });
     } catch (e) {
       print("Error sending message: $e");
       throw Exception("Failed to send message");
+    }
+  }
+
+  static Future<void> markMessagesAsRead(
+      String recipientId, String senderId) async {
+    try {
+      final chatRef = _firestore
+          .collection('chats')
+          .doc(generateChatId(recipientId, senderId));
+
+      // Ažuriranje vrednosti unreadCount za korisnika
+      await chatRef.update({
+        'unreadCount.$senderId': 0,
+      });
+    } catch (e) {
+      print("Error marking messages as read: $e");
+      throw Exception("Failed to mark messages as read");
     }
   }
 
@@ -86,6 +105,10 @@ class ChatService {
           'lastMessage': null,
           'lastMessageTime': null,
           'createdAt': DateTime.now(),
+          'unreadCount': {
+            userId1: 0,
+            userId2: 0,
+          },
         });
       }
     } catch (e) {
@@ -112,6 +135,28 @@ class ChatService {
     } catch (e) {
       print("Error streaming user chats: $e");
       throw Exception("Failed to stream user chats");
+    }
+  }
+
+  static Stream<int> streamTotalUnreadMessages(String userId) {
+    try {
+      return _firestore
+          .collection('chats')
+          .where('users', arrayContains: userId)
+          .snapshots()
+          .map((querySnapshot) {
+        int totalUnreadMessages = 0;
+
+        for (var doc in querySnapshot.docs) {
+          final unreadCount = doc['unreadCount'] as Map<String, dynamic>;
+          totalUnreadMessages += (unreadCount[userId] ?? 0) as int;
+        }
+
+        return totalUnreadMessages;
+      });
+    } catch (e) {
+      print("Error streaming total unread messages: $e");
+      throw Exception("Failed to stream total unread messages");
     }
   }
 }

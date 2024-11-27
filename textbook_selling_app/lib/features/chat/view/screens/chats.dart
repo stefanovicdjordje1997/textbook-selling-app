@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:textbook_selling_app/core/constants/local_keys.dart';
+import 'package:textbook_selling_app/core/localization/app_localizations.dart';
 import 'package:textbook_selling_app/core/models/chat.dart';
 import 'package:textbook_selling_app/core/navigation/create_route.dart';
 import 'package:textbook_selling_app/features/chat/view/screens/single_chat.dart';
@@ -18,7 +20,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inbox'),
+        title: Text(AppLocalizations.getString(LocalKeys.inbox)),
       ),
       body: StreamBuilder<List<Chat>>(
         stream: ChatService.streamUserChats(),

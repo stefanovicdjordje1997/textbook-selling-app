@@ -12,7 +12,11 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
   final ImagePicker _picker = ImagePicker();
 
   Future<String?> pickImages() async {
-    final List<XFile> pickedImages = await _picker.pickMultiImage();
+    final List<XFile> pickedImages = await _picker.pickMultiImage(
+      maxWidth: 720,
+      maxHeight: 960,
+      imageQuality: 50,
+    );
     final isPickedMoreThanMax = state.images.length + pickedImages.length > 6;
 
     if (isPickedMoreThanMax) {
@@ -29,7 +33,12 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
   }
 
   Future<void> takePicture() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 720,
+      maxHeight: 960,
+      imageQuality: 50,
+    );
     if (image != null && state.images.length < 6) {
       ImageRepository.addImage(image);
       state = state.copyWith(images: [...state.images, image]);

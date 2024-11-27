@@ -156,7 +156,6 @@ class TextbookService {
           TaskSnapshot snapshot = await uploadTask;
           String downloadURL = await snapshot.ref.getDownloadURL();
           newImageUrls.add(downloadURL);
-          print('----------> IMAGE URL: ${downloadURL}');
         }
       }
 
@@ -186,24 +185,54 @@ class TextbookService {
   static Future<TextbooksResponse> getAllTextbooks({
     required int page,
     required int limit,
+    String? institutionType,
+    String? university,
+    String? institution,
+    String? degreeLevel,
+    String? major,
+    int? yearOfStudy,
   }) async {
     try {
-      // Prvo dohvati ukupan broj elemenata za proračunavanje broja strana
-      AggregateQuerySnapshot countSnapshot =
-          await _firestore.collection('textbooks').count().get();
+      Query baseQuery = _firestore.collection('textbooks');
+
+      // Dodaj filtriranje po `institutionType` ako je dostupno
+      if (institutionType != null && institutionType.isNotEmpty) {
+        baseQuery =
+            baseQuery.where('institutionType', isEqualTo: institutionType);
+      }
+
+      if (university != null && university.isNotEmpty) {
+        baseQuery = baseQuery.where('university', isEqualTo: university);
+      }
+
+      if (institution != null && institution.isNotEmpty) {
+        baseQuery = baseQuery.where('institution', isEqualTo: institution);
+      }
+
+      if (degreeLevel != null && degreeLevel.isNotEmpty) {
+        baseQuery = baseQuery.where('degreeLevel', isEqualTo: degreeLevel);
+      }
+
+      if (major != null && major.isNotEmpty) {
+        baseQuery = baseQuery.where('major', isEqualTo: major);
+      }
+
+      if (yearOfStudy != null && yearOfStudy != 0) {
+        baseQuery = baseQuery.where('yearOfStudy', isEqualTo: yearOfStudy);
+      }
+
+      // Prvo dohvati ukupan broj elemenata nakon primene filtera
+      AggregateQuerySnapshot countSnapshot = await baseQuery.count().get();
       int totalItems = countSnapshot.count ?? 0;
 
       // Proračunaj ukupan broj strana
       int totalPages = (totalItems / limit).ceil();
 
-      Query query = _firestore
-          .collection('textbooks')
-          .orderBy('createdAt', descending: true) // Order by creation date
-          .limit(limit);
+      // Dodaj sortiranje i paginaciju
+      Query query =
+          baseQuery.orderBy('createdAt', descending: true).limit(limit);
 
-      // Apply startAfterDocument only if not on the first page
       if (page > 0) {
-        // Get the last document of the previous page
         QuerySnapshot previousPageSnapshot =
             await query.limit(page * limit).get();
         if (previousPageSnapshot.docs.isNotEmpty) {
@@ -214,10 +243,10 @@ class TextbookService {
 
       QuerySnapshot snapshot = await query.get();
 
+      // Mapiranje dokumenata u listu Textbook objekata
       List<Textbook> textbooks = [];
 
       for (var doc in snapshot.docs) {
-        // Load the user as before
         String userId = doc['addedBy'];
         DocumentSnapshot userDoc =
             await _firestore.collection('users').doc(userId).get();

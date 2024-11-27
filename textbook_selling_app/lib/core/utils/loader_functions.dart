@@ -16,6 +16,8 @@ void showLoader(BuildContext context) {
 // Function to hide the loader
 void hideLoader(BuildContext context) {
   if (Navigator.of(context).canPop()) {
-    Navigator.of(context).pop();
+    if (Navigator.canPop(context)) {
+      Navigator.of(context).pop();
+    }
   }
 }

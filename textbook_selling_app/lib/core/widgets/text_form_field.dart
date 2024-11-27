@@ -42,7 +42,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   void didUpdateWidget(covariant CustomTextFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.defaultText != oldWidget.defaultText) {
-      _controller.text = widget.defaultText ?? '';
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controller.text = widget.defaultText ?? '';
+      });
     }
   }
 

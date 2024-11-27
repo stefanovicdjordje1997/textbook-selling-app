@@ -108,7 +108,11 @@ class Validators {
   }
 
   // Year of study validator
-  static String? validateYearOfStudy(String? value) {
+  static String? validateYearOfStudy(String? value, {canBeEmpty = false}) {
+    if (canBeEmpty && (value == null || value.trim().isEmpty)) {
+      return null;
+    }
+
     if (value == null || value.trim().isEmpty) {
       return AppLocalizations.getString(LocalKeys.validatorEmptyYearOfStudy);
     }

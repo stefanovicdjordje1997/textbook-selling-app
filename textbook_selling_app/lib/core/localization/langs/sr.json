@@ -117,7 +117,19 @@
 
   "noFavoriteTextbooksMessage": "Nema omiljenih udžbenika. 😢",
   "noMyTextbooksMessage": "Nema tvojih oglasa za udžbenike. 😢",
+  "noTextbooks": "Nema oglasa za udžbenike. 😕",
   "areYouSure": "Jesi li siguran?",
   "deleteConfirmationMessage": "Da li stvarno želiš da izbrišeš udžbenik?",
-  "logoutConfirmationMessage": "Da li stvarno želiš da se izloguješ?"
+  "logoutConfirmationMessage": "Da li stvarno želiš da se izloguješ?",
+
+  "inbox": "Poruke",
+  "message": "Unesi tekst poruke...",
+  "loading": "Učitavam...",
+  "unknownUser": "Nepoznat korisnik",
+  "noMessages": "Nema poruka, čet je prazan.",
+  "today": "Danas",
+  "yesterday": "Juče",
+  "filterMenu": "Filteri",
+  "reset": "Resetuj",
+  "applyFilters": "Primeni filtere"
 }

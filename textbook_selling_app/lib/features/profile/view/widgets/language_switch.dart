@@ -9,11 +9,10 @@ class LanguageSwitch extends StatelessWidget {
     required this.onLanguageChange,
   });
 
-  final String leftLanguage; // Npr. "🇷🇸 Srpski"
-  final String rightLanguage; // Npr. "🇺🇸 English"
-  final bool isLeftLanguageSelected; // Da li je trenutno izabran lev jezik
-  final Future<void> Function(bool)
-      onLanguageChange; // Funkcija koja menja jezik
+  final String leftLanguage;
+  final String rightLanguage;
+  final bool isLeftLanguageSelected;
+  final Future<void> Function(bool) onLanguageChange;
 
   @override
   Widget build(BuildContext context) {
