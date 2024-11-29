@@ -29,7 +29,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     return EducationInstitutionService.getInstitutionTypes();
   }
 
-  void getUniversities(BuildContext context) async {
+  Future<void> getUniversities(BuildContext context) async {
     List<String> universities =
         await EducationInstitutionService.getUniversities(
             context, state.institutionType);
@@ -170,12 +170,23 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     state = state.copyWith(price: double.tryParse(value!));
   }
 
-  void setTextbook(Textbook? textbook) {
+  void setTextbook(Textbook? textbook, BuildContext context) async {
     state = state.copyWith(
       textbook: textbook,
+      institutionType: textbook?.institutionType,
+      selectedUniversity: textbook?.university,
+      selectedInstitution: textbook?.institution,
+      selectedDegreeLevel: textbook?.degreeLevel,
+      selectedMajor: textbook?.major,
       used: textbook?.used,
       damaged: textbook?.damaged,
     );
+    if (textbook != null) {
+      await getUniversities(context);
+      getInstitutions();
+      getDegreeLevels();
+      getMajors();
+    }
   }
 
   // Form validation

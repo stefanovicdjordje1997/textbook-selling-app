@@ -43,12 +43,12 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(addTextbookViewModelProvider.notifier)
-          .setTextbook(widget.textbook);
+          .setTextbook(widget.textbook, context);
     });
+    super.initState();
   }
 
   @override

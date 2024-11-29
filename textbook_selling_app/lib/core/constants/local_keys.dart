@@ -101,6 +101,7 @@ class LocalKeys {
   static const noText = 'noText';
   static const noFavoriteTextbooksMessage = 'noFavoriteTextbooksMessage';
   static const noMyTextbooksMessage = 'noMyTextbooksMessage';
+  static const noTextbooks = 'noTextbooks';
   static const areYouSure = 'areYouSure';
   static const deleteConfirmationMessage = 'deleteConfirmationMessage';
   static const logoutConfirmationMessage = 'logoutConfirmationMessage';
@@ -111,4 +112,7 @@ class LocalKeys {
   static const noMessages = 'noMessages';
   static const today = 'today';
   static const yesterday = 'yesterday';
+  static const filterMenu = 'filterMenu';
+  static const reset = 'reset';
+  static const applyFilters = 'applyFilters';
 }
