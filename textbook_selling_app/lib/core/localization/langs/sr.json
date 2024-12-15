@@ -121,6 +121,7 @@
   "areYouSure": "Jesi li siguran?",
   "deleteConfirmationMessage": "Da li stvarno želiš da izbrišeš udžbenik?",
   "logoutConfirmationMessage": "Da li stvarno želiš da se izloguješ?",
+  "invalidFormMessage": "Forma nije validna, proveri sva polja.",
 
   "inbox": "Poruke",
   "message": "Unesi tekst poruke...",

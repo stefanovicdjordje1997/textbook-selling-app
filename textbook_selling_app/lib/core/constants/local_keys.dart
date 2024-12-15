@@ -105,6 +105,7 @@ class LocalKeys {
   static const areYouSure = 'areYouSure';
   static const deleteConfirmationMessage = 'deleteConfirmationMessage';
   static const logoutConfirmationMessage = 'logoutConfirmationMessage';
+  static const invalidFormMessage = 'invalidFormMessage';
   static const inbox = 'inbox';
   static const message = 'message';
   static const loading = 'loading';

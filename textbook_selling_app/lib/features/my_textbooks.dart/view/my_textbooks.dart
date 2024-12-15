@@ -57,36 +57,40 @@ class _UserTextbooksScreenState extends ConsumerState<MyTextbooksScreen> {
                         onTap: () => Navigator.of(context).push(
                           createRoute(
                               page: TextbookDetailsScreen(
-                                textbook: state.userTextbooks[index],
-                                context: TextbookDetailsContext.myTextbooks,
-                                onDelete: (textbook) {
-                                  showConfirmationDialog(
-                                    context,
-                                    AppLocalizations.getString(
-                                        LocalKeys.areYouSure),
-                                    AppLocalizations.getString(
-                                        LocalKeys.deleteConfirmationMessage),
-                                    () async {
-                                      await viewModel
-                                          .removeUserTextbook(textbook);
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  );
-                                },
-                                onEdit: (textbook) =>
-                                    Navigator.of(context).push(
-                                  createRoute(
-                                    page: AddTextbookScreen(
-                                      textbook: textbook,
-                                      mode: TextbookMode.editing,
-                                    ),
-                                    animationType:
-                                        RouteAnimationType.slideFromRight,
-                                  ),
-                                ),
-                              ),
+                                  textbook: state.userTextbooks[index],
+                                  context: TextbookDetailsContext.myTextbooks,
+                                  onDelete: (textbook) {
+                                    showConfirmationDialog(
+                                      context,
+                                      AppLocalizations.getString(
+                                          LocalKeys.areYouSure),
+                                      AppLocalizations.getString(
+                                          LocalKeys.deleteConfirmationMessage),
+                                      () async {
+                                        await viewModel
+                                            .removeUserTextbook(textbook);
+                                        if (context.mounted) {
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    );
+                                  },
+                                  onEdit: (textbook) async {
+                                    final refresh =
+                                        await Navigator.of(context).push(
+                                      createRoute(
+                                        page: AddTextbookScreen(
+                                          textbook: textbook,
+                                          mode: TextbookMode.editing,
+                                        ),
+                                        animationType:
+                                            RouteAnimationType.slideFromRight,
+                                      ),
+                                    );
+                                    if (refresh != null && refresh) {
+                                      viewModel.fetchUserTextbooks();
+                                    }
+                                  }),
                               animationType: RouteAnimationType.slideFromRight),
                         ),
                       ),

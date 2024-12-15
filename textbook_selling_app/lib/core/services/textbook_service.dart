@@ -463,6 +463,7 @@ class TextbookService {
       // Dohvati korisnika i njegove dodane knjige
       QuerySnapshot snapshot = await _firestore
           .collection('textbooks')
+          .orderBy('createdAt', descending: true)
           .where('addedBy', isEqualTo: user.uid)
           .get();
 

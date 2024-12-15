@@ -16,7 +16,7 @@ class TextbookDetailsViewModel extends StateNotifier<TextbookDetailsState> {
     state = state.copyWith(isFavorite: !state.isFavorite);
   }
 
-  bool showChatButton(String id) {
+  bool isLoggedInUser(String id) {
     return !UserService.isUserLoggedIn(id);
   }
 }

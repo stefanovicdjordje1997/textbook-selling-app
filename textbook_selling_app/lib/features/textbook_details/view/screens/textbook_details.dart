@@ -28,7 +28,7 @@ class TextbookDetailsScreen extends ConsumerStatefulWidget {
 
   final Textbook textbook;
   final TextbookDetailsContext context;
-  final void Function(Textbook textbook)? onEdit;
+  final Future<void> Function(Textbook textbook)? onEdit;
   final void Function(Textbook textbook)? onDelete;
 
   @override
@@ -60,11 +60,12 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
-          maxLines: 3,
+          maxLines: 2,
         ),
         centerTitle: true,
         actions: [
-          if (widget.context == TextbookDetailsContext.favorites)
+          if (widget.context == TextbookDetailsContext.favorites &&
+              viewModel.isLoggedInUser(user!.id))
             FavoriteButton(
               isFavorite: isFavorite,
               onPressed: () => viewModel.toggleFavorite(textbook),
@@ -73,7 +74,12 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
             IconButton(
               icon: const Icon(Icons.edit),
               color: Theme.of(context).colorScheme.primary,
-              onPressed: () => widget.onEdit?.call(textbook),
+              onPressed: () async {
+                await widget.onEdit?.call(textbook);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
             ),
             IconButton(
               icon: const Icon(Icons.delete),
@@ -90,7 +96,7 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
           children: [
             UserInfoCard(
               user: user!,
-              showChatButton: viewModel.showChatButton(user.id),
+              showChatButton: viewModel.isLoggedInUser(user.id),
             ),
             const SizedBox(height: 20),
             PhotoGallery(
@@ -143,6 +149,11 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
               title: AppLocalizations.getString(
                   LocalKeys.textbookInformationsTitle),
               children: [
+                InfoRow(
+                    icon: Icons.subject,
+                    label:
+                        AppLocalizations.getString(LocalKeys.textbookNameLabel),
+                    value: textbook.name),
                 InfoRow(
                     icon: Icons.subject,
                     label:

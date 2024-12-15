@@ -131,6 +131,7 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                         onLongPress: () =>
                             isViewMode ? null : viewModel.onHoldImage(index),
                         child: AnimatedContainer(
+                          alignment: Alignment.center,
                           duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -259,13 +260,17 @@ class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
                   ),
                 if (isReordering)
                   Positioned(
-                    left: 100,
-                    right: 100,
                     bottom: 10,
-                    child: ElevatedButton(
-                      onPressed: viewModel.doneReordering,
-                      child: Text(
-                        AppLocalizations.getString(LocalKeys.doneButton),
+                    left: 0,
+                    right: 0,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        onPressed: viewModel.doneReordering,
+                        child: Text(
+                          AppLocalizations.getString(LocalKeys.doneButton),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),

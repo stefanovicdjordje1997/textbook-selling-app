@@ -28,6 +28,7 @@ class TextbookInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.textbookNameLabel),
           hintText: AppLocalizations.getString(LocalKeys.textbookNameHint),
           defaultText: textbook?.name,
+          capitalFirstLetter: true,
           validator: (value) {
             return viewModel.validateText(
                 value: value,
@@ -40,6 +41,7 @@ class TextbookInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.subjectNameLabel),
           hintText: AppLocalizations.getString(LocalKeys.subjectNameHint),
           defaultText: textbook?.subject,
+          capitalFirstLetter: true,
           validator: (value) {
             return viewModel.validateText(
                 value: value,
@@ -52,6 +54,7 @@ class TextbookInformations extends ConsumerWidget {
           labelText: AppLocalizations.getString(LocalKeys.descriptionLabel),
           hintText: AppLocalizations.getString(LocalKeys.descriptionHint),
           defaultText: textbook?.description,
+          capitalFirstLetter: true,
           maxLines: 5,
           validator: (value) => null,
           onSaved: viewModel.onSavedDescription,

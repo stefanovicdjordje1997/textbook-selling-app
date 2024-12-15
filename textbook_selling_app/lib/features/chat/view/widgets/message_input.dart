@@ -21,6 +21,7 @@ class MessageInput extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: AppLocalizations.getString(LocalKeys.message),
                 border: OutlineInputBorder(

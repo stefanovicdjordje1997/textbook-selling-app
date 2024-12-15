@@ -139,7 +139,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   Future<void> fetchTextbooks({
     required BuildContext context,
     int page = 0,
-    int limit = 2,
+    int limit = 5,
   }) async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true);

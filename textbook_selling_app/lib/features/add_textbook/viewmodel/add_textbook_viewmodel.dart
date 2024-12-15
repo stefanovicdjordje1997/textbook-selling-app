@@ -238,7 +238,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
 
         if (context.mounted) {
           hideLoader(context);
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         }
       } catch (error) {
         if (context.mounted) {
@@ -259,6 +259,11 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
           }
         }
       }
+    } else {
+      showSnackBar(
+          context: context,
+          message: AppLocalizations.getString(LocalKeys.invalidFormMessage),
+          type: SnackBarType.error);
     }
   }
 }

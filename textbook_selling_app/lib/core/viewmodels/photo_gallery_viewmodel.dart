@@ -26,7 +26,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
         for (var image in pickedImages) {
           ImageRepository.addImage(image);
         }
-        state = state.copyWith(images: [...state.images, ...pickedImages]);
+        state = state.copyWith(images: ImageRepository.images);
       }
       return null; // No message, indicating success
     }
@@ -41,7 +41,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
     );
     if (image != null && state.images.length < 6) {
       ImageRepository.addImage(image);
-      state = state.copyWith(images: [...state.images, image]);
+      state = state.copyWith(images: ImageRepository.images);
     }
   }
 
@@ -59,6 +59,7 @@ class PhotoGalleryViewModel extends StateNotifier<PhotoGalleryState> {
   }
 
   void setImages(List<String> images) async {
+    await DefaultCacheManager().emptyCache();
     List<XFile> fileImages = [];
     for (final image in images) {
       XFile fileImage = await _getImageXFileByUrl(image);

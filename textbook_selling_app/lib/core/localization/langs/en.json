@@ -122,6 +122,7 @@
     "areYouSure": "Are you sure?",
     "deleteConfirmationMessage": "Do you really want to delete this item?",
     "logoutConfirmationMessage": "Do you really want to logout?",
+    "invalidFormMessage": "Form not valid, please check the invalid fields.",
 
     "inbox": "Inbox",
     "message": "Type message...",

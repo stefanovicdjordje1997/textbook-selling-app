@@ -34,8 +34,9 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
   @override
   void deactivate() {
     // Reset state of the provider before dispose
-    ref.invalidate(addTextbookViewModelProvider);
     ref.invalidate(photoGalleryProvider);
+    ref.invalidate(addTextbookViewModelProvider);
+
     ImageRepository.clearImages();
 
     super.deactivate();
@@ -43,6 +44,7 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
 
   @override
   void initState() {
+    ImageRepository.clearImages();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(addTextbookViewModelProvider.notifier)
@@ -105,14 +107,17 @@ class _AddTextbookScreenState extends ConsumerState<AddTextbookScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
-        child: CustomButton(
-          onPressed: () {
-            viewModel.saveForm(
-                context: context, isEditing: widget.textbook != null);
-          },
-          text: AppLocalizations.getString(widget.textbook == null
-              ? LocalKeys.addTextbook
-              : LocalKeys.saveTextbook),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: CustomButton(
+            onPressed: () {
+              viewModel.saveForm(
+                  context: context, isEditing: widget.textbook != null);
+            },
+            text: AppLocalizations.getString(widget.textbook == null
+                ? LocalKeys.addTextbook
+                : LocalKeys.saveTextbook),
+          ),
         ),
       ),
     );
