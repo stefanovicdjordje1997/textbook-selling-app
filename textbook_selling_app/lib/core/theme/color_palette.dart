@@ -13,11 +13,11 @@ class ColorPalette {
   static const borderEnabledDark = Color.fromARGB(255, 92, 86, 80);
 
   // Light theme
-  static const primaryLight = Color(0xFF87521A);
-  static const onPrimaryLight = Color(0xFFFFFFFF);
+  static const primaryLight = Color.fromARGB(255, 179, 92, 0);
+  static const onPrimaryLight = Color.fromARGB(255, 255, 229, 209);
   static const secondaryLight = Color(0xFF735943);
   static const onSecondaryLight = Color(0xFFFFFFFF);
-  static const surfaceLight = Color(0xFFF8F5F5);
+  static const surfaceLight = Color.fromARGB(255, 252, 209, 183);
   static const onSurfaceLight = Color(0xFF221A14);
   static const errorLight = Color(0xFFBA1A1A);
   static const onErrorLight = Color(0xFFFFFFFF);

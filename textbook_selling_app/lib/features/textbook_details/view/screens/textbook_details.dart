@@ -150,12 +150,17 @@ class _TextbookDetailsScreenState extends ConsumerState<TextbookDetailsScreen> {
                   LocalKeys.textbookInformationsTitle),
               children: [
                 InfoRow(
-                    icon: Icons.subject,
+                    icon: Icons.auto_stories,
                     label:
                         AppLocalizations.getString(LocalKeys.textbookNameLabel),
                     value: textbook.name),
                 InfoRow(
-                    icon: Icons.subject,
+                    icon: Icons.edit_note,
+                    label: AppLocalizations.getString(
+                        LocalKeys.textbookAuthorLabel),
+                    value: textbook.author),
+                InfoRow(
+                    icon: Icons.library_books,
                     label:
                         AppLocalizations.getString(LocalKeys.subjectNameLabel),
                     value: textbook.subject),

@@ -1,6 +1,5 @@
   {
     "appName": "Flutter Demo",
-
     "validatorEmptyEmail": "Email cannot be empty",
     "validatorInvalidEmail": "Enter a valid email",
     "validatorEmptyPassword": "Password cannot be empty",
@@ -22,22 +21,16 @@
     "validatorInvalidYearOfStudy": "Enter a valid study year between 1 and 6",
     "validatorEmptyDropdown": "Please select a",
     "validateEmptyInstitutionType": "Please select a Institution type",
-
-    "imageLimitMessage" : "You can only select up to 6 images.",
-
+    "imageLimitMessage": "You can only select up to 6 images.",
     "noPhotos": "No photos",
     "noPhotosDescription": "Maximum number of photos you can add is 6. The first image will appear as the cover photo on the listing. To reorder images, hold on any image to access the options.",
     "changeOrderDescription": "Use arrows to change the order of the photo.",
-
     "doneButton": "Done",
     "takePictureButton": "Camera",
     "pickFromGalleryButton": "Gallery",
-
     "addTextbook": "Add Textbook",
     "saveTextbook": "Save Textbook",
     "editTextbook": "Edit Textbook",
-
-    
     "educationInstitutionInformationsTitle": "Education Institution Informations:",
     "institutionTypeLabel": "Institution Type",
     "institutionTypeSearchLabel": "Search institution type",
@@ -52,10 +45,11 @@
     "majorSearchLabel": "Search institution",
     "yearOfStudyLabel": "Year of Study",
     "yearOfStudyHintText": "Year of Study of a textbook",
-
     "textbookInformationsTitle": "Textbook Informations:",
     "textbookNameLabel": "Textbook name",
     "textbookNameHint": "Enter textbook name",
+    "textbookAuthorLabel": "Author",
+    "textbookAuthorHint": "Enter author full name",
     "subjectNameLabel": "Subject name",
     "subjectNameHint": "Enter subject name",
     "descriptionLabel": "Description",
@@ -66,24 +60,18 @@
     "priceHint": "Enter price in RSD",
     "usedLabel": "Used",
     "damagedLabel": "Damaged",
-
     "userDataTitle": "User Data",
     "email": "Email",
     "dateOfBirth": "Date of Birth",
     "phoneNumber": "Phone Number",
-
     "userInformationsTitle": "Ad owner Informations",
-
     "textbookPhotosTitle": "Textbook photos:",
-
     "faculty": "Faculty",
     "higherSchool": "Higher school",
-
     "gettingDataErrorMessage": "Error getting data. Try again later.",
     "unknownErrorMessage": "Unknown error.",
     "anErrorOccuredMessage": "An error occured!",
     "addTextbookErrorMessage": "Error adding textbook. Try again.",
-    
     "login": "Login",
     "logout": "Logout",
     "register": "Register",
@@ -106,16 +94,13 @@
     "phoneLabel": "Phone number",
     "phoneHint": "612345678",
     "dontHaveAnAccount": "Don't have an account? ",
-
     "home": "Home",
     "allAds": "All Ads",
     "favorites": "Favorites",
     "yourAds": "My Ads",
     "profile": "Profile",
-
     "yesText": "Yes",
     "noText": "No",
-
     "noFavoriteTextbooksMessage": "There are no favorite textbooks. 😕",
     "noMyTextbooksMessage": "You haven't added any textbooks yet. 😕",
     "noTextbooks": "There are no textbooks. 😕",
@@ -123,7 +108,6 @@
     "deleteConfirmationMessage": "Do you really want to delete this item?",
     "logoutConfirmationMessage": "Do you really want to logout?",
     "invalidFormMessage": "Form not valid, please check the invalid fields.",
-
     "inbox": "Inbox",
     "message": "Type message...",
     "loading": "Loading...",

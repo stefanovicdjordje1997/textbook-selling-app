@@ -147,6 +147,10 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
     state = state.copyWith(name: value);
   }
 
+  void onSavedAuthor(String? value) {
+    state = state.copyWith(author: value);
+  }
+
   void onSavedSubject(String? value) {
     state = state.copyWith(subject: value);
   }
@@ -209,6 +213,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
             yearOfStudy: state.yearOfStudy,
             yearOfPublication: state.yearOfPublication,
             name: state.name,
+            author: state.author,
             subject: state.subject,
             description: state.description,
             used: state.used,
@@ -227,6 +232,7 @@ class AddTextbookViewModel extends StateNotifier<AddTextbookState> {
             yearOfStudy: state.yearOfStudy,
             yearOfPublication: state.yearOfPublication,
             name: state.name,
+            author: state.author,
             subject: state.subject,
             description: state.description,
             used: state.used,
@@ -281,6 +287,7 @@ class AddTextbookState {
   final int? yearOfStudy;
   final int? yearOfPublication;
   final String? name;
+  final String? author;
   final String? subject;
   final String? description;
   final bool? used;
@@ -303,6 +310,7 @@ class AddTextbookState {
       this.yearOfStudy,
       this.yearOfPublication,
       this.name,
+      this.author,
       this.subject,
       this.description,
       this.used = false,
@@ -325,6 +333,7 @@ class AddTextbookState {
     int? yearOfStudy,
     int? yearOfPublication,
     String? name,
+    String? author,
     String? subject,
     String? description,
     bool? used,
@@ -346,6 +355,7 @@ class AddTextbookState {
       yearOfStudy: yearOfStudy ?? this.yearOfStudy,
       yearOfPublication: yearOfPublication ?? this.yearOfPublication,
       name: name ?? this.name,
+      author: author ?? this.author,
       subject: subject ?? this.subject,
       description: description ?? this.description,
       used: used ?? this.used,

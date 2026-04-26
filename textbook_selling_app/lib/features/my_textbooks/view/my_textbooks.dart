@@ -7,7 +7,7 @@ import 'package:textbook_selling_app/core/utils/show_confirmation_dialog.dart';
 import 'package:textbook_selling_app/core/widgets/loader.dart';
 import 'package:textbook_selling_app/core/widgets/textbook_card.dart';
 import 'package:textbook_selling_app/features/add_textbook/view/screens/add_textbook.dart';
-import 'package:textbook_selling_app/features/my_textbooks.dart/viewmodel/my_textbooks_viewmodel.dart';
+import 'package:textbook_selling_app/features/my_textbooks/viewmodel/my_textbooks_viewmodel.dart';
 import 'package:textbook_selling_app/features/textbook_details/view/screens/textbook_details.dart';
 
 class MyTextbooksScreen extends ConsumerStatefulWidget {

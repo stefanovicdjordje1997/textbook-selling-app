@@ -18,7 +18,7 @@ class AllTextbooksScreen extends ConsumerStatefulWidget {
 }
 
 class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
-  final int limit = 2;
+  final int limit = AllTextbooksViewModel.pageSize;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
     Future.microtask(() {
       final viewModel = ref.read(allTextbooksProvider.notifier);
       if (ref.read(allTextbooksProvider).textbooks == null && context.mounted) {
-        viewModel.fetchTextbooks(context: context);
+        viewModel.fetchTextbooks(context: context, limit: limit);
       }
     });
   }
@@ -42,7 +42,7 @@ class _AllTextbooksScreenState extends ConsumerState<AllTextbooksScreen> {
           onFilterApplied: (filter) {
             final viewModel = ref.read(allTextbooksProvider.notifier);
             viewModel.refreshTextbooks(context);
-            viewModel.fetchTextbooks(context: context);
+            // viewModel.fetchTextbooks(context: context);
           },
         );
       },

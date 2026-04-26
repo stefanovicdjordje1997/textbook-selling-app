@@ -1,6 +1,5 @@
 {
   "appName": "Flutter Demo",
-
   "validatorEmptyEmail": "Email ne može biti prazan",
   "validatorInvalidEmail": "Unesite važeći email",
   "validatorEmptyPassword": "Lozinka ne može biti prazna",
@@ -22,21 +21,16 @@
   "validatorInvalidYearOfStudy": "Unesite važeću godinu studija između 1 i 6",
   "validatorEmptyDropdown": "Molimo izaberite",
   "validateEmptyInstitutionType": "Molimo izaberite tip institucije",
-
   "imageLimitMessage": "Možete izabrati do 6 fotografija.",
-
   "noPhotos": "Nema fotografija",
   "noPhotosDescription": "Maksimalan broj fotografija koje možete dodati je 6. Prva fotografija će biti prikazana kao naslovna. Da promenite redosled, držite na bilo kojoj slici za opcije.",
   "changeOrderDescription": "Koristite strelice za promenu redosleda fotografija.",
-
   "doneButton": "Sačuvaj",
   "takePictureButton": "Kamera",
   "pickFromGalleryButton": "Galerija",
-
   "addTextbook": "Dodaj udžbenik",
   "saveTextbook": "Sačuvaj udžbenik",
   "editTextbook": "Izmeni udžbenik",
-
   "educationInstitutionInformationsTitle": "Informacije o obrazovnoj ustanovi:",
   "institutionTypeLabel": "Tip obrazovne ustanove",
   "institutionTypeSearchLabel": "Pretraži tip obrazovne ustanove",
@@ -51,10 +45,11 @@
   "majorSearchLabel": "Pretraži smer",
   "yearOfStudyLabel": "Godina studija",
   "yearOfStudyHintText": "Godina studija udžbenika",
-
   "textbookInformationsTitle": "Informacije o udžbeniku:",
   "textbookNameLabel": "Naziv udžbenika",
   "textbookNameHint": "Unesite naziv udžbenika",
+  "textbookAuthorLabel": "Autor",
+  "textbookAuthorHint": "Unesite ime i prezime autora",
   "subjectNameLabel": "Naziv predmeta",
   "subjectNameHint": "Unesite naziv predmeta",
   "descriptionLabel": "Opis",
@@ -65,24 +60,18 @@
   "priceHint": "Unesite cenu u RSD",
   "usedLabel": "Korišćeno",
   "damagedLabel": "Oštećeno",
-
   "userDataTitle": "Podaci o korisniku",
   "email": "Email",
   "dateOfBirth": "Datum rođenja",
   "phoneNumber": "Broj telefona",
-
   "userInformationsTitle": "Vlasnik oglasa",
-
   "textbookPhotosTitle": "Fotografije udžbenika:",
-
-  "faculty": "Faculty",
-  "higherSchool": "Higher school",
-
+  "faculty": "Fakultet",
+  "higherSchool": "Viša škola",
   "gettingDataErrorMessage": "Greška pri preuzimanju podataka. Pokušajte ponovo kasnije.",
   "unknownErrorMessage": "Nepoznata greška.",
   "anErrorOccuredMessage": "Došlo je do greške!",
   "addTextbookErrorMessage": "Greška prilikom dodavanja udžbenika. Pokušajte ponovo.",
-
   "login": "Prijava",
   "logout": "Odjava",
   "register": "Registracija",
@@ -105,16 +94,13 @@
   "phoneLabel": "Broj telefona",
   "phoneHint": "612345678",
   "dontHaveAnAccount": "Nemate nalog? ",
-
   "home": "Početna",
   "allAds": "Svi",
   "favorites": "Omiljeni",
   "yourAds": "Moji",
   "profile": "Profil",
-
   "yesText": "Da",
   "noText": "Ne",
-
   "noFavoriteTextbooksMessage": "Nema omiljenih udžbenika. 😢",
   "noMyTextbooksMessage": "Nema tvojih oglasa za udžbenike. 😢",
   "noTextbooks": "Nema oglasa za udžbenike. 😕",
@@ -122,7 +108,6 @@
   "deleteConfirmationMessage": "Da li stvarno želiš da izbrišeš udžbenik?",
   "logoutConfirmationMessage": "Da li stvarno želiš da se izloguješ?",
   "invalidFormMessage": "Forma nije validna, proveri sva polja.",
-
   "inbox": "Poruke",
   "message": "Unesi tekst poruke...",
   "loading": "Učitavam...",

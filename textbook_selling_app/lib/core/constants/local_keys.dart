@@ -4,11 +4,14 @@ class LocalKeys {
   static const validatorInvalidEmail = 'validatorInvalidEmail';
   static const validatorEmptyPassword = 'validatorEmptyPassword';
   static const validatorShortPassword = 'validatorShortPassword';
-  static const validatorInvalidRepeatedPassword = 'validatorInvalidRepeatedPassword';
+  static const validatorInvalidRepeatedPassword =
+      'validatorInvalidRepeatedPassword';
   static const validatorEmptyDateOfBirth = 'validatorEmptyDateOfBirth';
   static const validatorEmptyText = 'validatorEmptyText';
-  static const validatorInvalidTextAllowNumbers = 'validatorInvalidTextAllowNumbers';
-  static const validatorInvalidTextNotAllowNumbers = 'validatorInvalidTextNotAllowNumbers';
+  static const validatorInvalidTextAllowNumbers =
+      'validatorInvalidTextAllowNumbers';
+  static const validatorInvalidTextNotAllowNumbers =
+      'validatorInvalidTextNotAllowNumbers';
   static const validatorShortText = 'validatorShortText';
   static const validatorEmptyPhoneNumber = 'validatorEmptyPhoneNumber';
   static const validatorInvalidPhoneNumber = 'validatorInvalidPhoneNumber';
@@ -31,7 +34,8 @@ class LocalKeys {
   static const addTextbook = 'addTextbook';
   static const saveTextbook = 'saveTextbook';
   static const editTextbook = 'editTextbook';
-  static const educationInstitutionInformationsTitle = 'educationInstitutionInformationsTitle';
+  static const educationInstitutionInformationsTitle =
+      'educationInstitutionInformationsTitle';
   static const institutionTypeLabel = 'institutionTypeLabel';
   static const institutionTypeSearchLabel = 'institutionTypeSearchLabel';
   static const institutionTypeDefaultItem = 'institutionTypeDefaultItem';
@@ -48,6 +52,8 @@ class LocalKeys {
   static const textbookInformationsTitle = 'textbookInformationsTitle';
   static const textbookNameLabel = 'textbookNameLabel';
   static const textbookNameHint = 'textbookNameHint';
+  static const textbookAuthorLabel = 'textbookAuthorLabel';
+  static const textbookAuthorHint = 'textbookAuthorHint';
   static const subjectNameLabel = 'subjectNameLabel';
   static const subjectNameHint = 'subjectNameHint';
   static const descriptionLabel = 'descriptionLabel';

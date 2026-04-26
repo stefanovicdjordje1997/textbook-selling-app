@@ -17,6 +17,8 @@ const String _emptyString = '';
 class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   AllTextbooksViewModel() : super(AllTextbooksState());
 
+  static const int pageSize = 5;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   get institutionTypes {
@@ -139,7 +141,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
   Future<void> fetchTextbooks({
     required BuildContext context,
     int page = 0,
-    int limit = 5,
+    int limit = pageSize,
   }) async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true);
@@ -163,7 +165,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
         isLoading: false,
       );
 
-      if (response.totalPages == page) return;
+      if(page + 1 >= response.totalPages) return;
     } catch (error) {
       if (context.mounted) {
         showSnackBar(
@@ -189,7 +191,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
       isLoading: false,
     );
 
-    await fetchTextbooks(context: context); // Ponovno učitavanje
+    await fetchTextbooks(context: context, limit: pageSize); // Ponovno učitavanje
   }
 
   Future<bool> filterTextbooks(BuildContext context) async {
@@ -204,7 +206,7 @@ class AllTextbooksViewModel extends StateNotifier<AllTextbooksState> {
         isLoading: false,
       );
 
-      await fetchTextbooks(context: context); // Ponovno učitavanje
+      await fetchTextbooks(context: context, limit: pageSize); // Ponovno učitavanje
       return true;
     }
     return false;

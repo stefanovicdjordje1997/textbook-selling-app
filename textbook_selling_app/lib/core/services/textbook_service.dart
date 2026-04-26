@@ -15,6 +15,7 @@ final _storage = FirebaseStorage.instance;
 class TextbookService {
   static Future<void> addTextbook({
     required String? name,
+    required String? author,
     required String? subject,
     required String? description,
     required int? yearOfStudy,
@@ -67,6 +68,7 @@ class TextbookService {
       // Save textbook data to Firestore
       await textbookRef.set({
         'name': name ?? '',
+        'author': author ?? '',
         'subject': subject ?? '',
         'description': description ?? '',
         'yearOfStudy': yearOfStudy ?? 0,
@@ -91,6 +93,7 @@ class TextbookService {
   static Future<void> updateTextbook({
     required String textbookId,
     String? name,
+    String? author,
     String? subject,
     String? description,
     int? yearOfStudy,
@@ -162,6 +165,7 @@ class TextbookService {
       // Update textbook details in Firestore
       await textbookRef.update({
         if (name != null) 'name': name,
+        if (author != null) 'author': author,
         if (subject != null) 'subject': subject,
         if (description != null) 'description': description,
         if (yearOfStudy != null) 'yearOfStudy': yearOfStudy,
@@ -281,6 +285,7 @@ class TextbookService {
           institutionType: doc['institutionType'],
           major: doc['major'],
           name: doc['name'],
+          author: doc['author'],
           price: (doc['price'] as num).toDouble(),
           subject: doc['subject'],
           university: doc['university'],
@@ -373,6 +378,7 @@ class TextbookService {
           institutionType: doc['institutionType'],
           major: doc['major'],
           name: doc['name'],
+          author: doc['author'],
           price: (doc['price'] as num).toDouble(),
           subject: doc['subject'],
           university: doc['university'],
@@ -505,6 +511,7 @@ class TextbookService {
           institutionType: doc['institutionType'],
           major: doc['major'],
           name: doc['name'],
+          author: doc['author'],
           price: (doc['price'] as num).toDouble(),
           subject: doc['subject'],
           university: doc['university'],

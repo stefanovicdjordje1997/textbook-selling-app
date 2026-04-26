@@ -38,6 +38,19 @@ class TextbookInformations extends ConsumerWidget {
           onSaved: viewModel.onSavedName,
         ),
         CustomTextFormField(
+          labelText: AppLocalizations.getString(LocalKeys.textbookAuthorLabel),
+          hintText: AppLocalizations.getString(LocalKeys.textbookAuthorHint),
+          defaultText: textbook?.author,
+          capitalFirstLetter: true,
+          validator: (value) {
+            return viewModel.validateText(
+                value: value,
+                fieldName:
+                    AppLocalizations.getString(LocalKeys.textbookAuthorLabel));
+          },
+          onSaved: viewModel.onSavedAuthor,
+        ),
+        CustomTextFormField(
           labelText: AppLocalizations.getString(LocalKeys.subjectNameLabel),
           hintText: AppLocalizations.getString(LocalKeys.subjectNameHint),
           defaultText: textbook?.subject,

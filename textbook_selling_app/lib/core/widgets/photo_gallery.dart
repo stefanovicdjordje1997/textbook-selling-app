@@ -30,14 +30,21 @@ class PhotoGallery extends ConsumerStatefulWidget {
 class _PhotoGalleryState extends ConsumerState<PhotoGallery> {
   final PageController _pageController = PageController();
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     if (widget.images.isNotEmpty) {
+  //       ref.read(photoGalleryProvider.notifier).setImages(widget.images);
+  //     }
+  //   });
+  // }
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.images.isNotEmpty) {
-        ref.read(photoGalleryProvider.notifier).setImages(widget.images);
-      }
-    });
+  void didUpdateWidget(PhotoGallery oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.images != oldWidget.images && widget.images.isNotEmpty) {
+      ref.read(photoGalleryProvider.notifier).setImages(widget.images);
+    }
   }
 
   @override

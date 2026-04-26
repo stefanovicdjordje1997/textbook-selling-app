@@ -8,7 +8,7 @@ import 'package:textbook_selling_app/features/add_textbook/view/screens/add_text
 import 'package:textbook_selling_app/features/all_textbooks/view/screens/all_textbooks.dart';
 import 'package:textbook_selling_app/features/favorite_textbooks/view/screens/favorite_textbooks.dart';
 import 'package:textbook_selling_app/features/home/viewmodel/home_viewmodel.dart';
-import 'package:textbook_selling_app/features/my_textbooks.dart/view/my_textbooks.dart';
+import 'package:textbook_selling_app/features/my_textbooks/view/my_textbooks.dart';
 import 'package:textbook_selling_app/features/profile/view/screens/profile.dart';
 
 class HomeScreen extends ConsumerWidget {

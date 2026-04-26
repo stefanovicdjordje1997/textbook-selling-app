@@ -12,6 +12,7 @@ class Textbook {
   final String institutionType;
   final String major;
   final String name;
+  final String author;
   final double price;
   final String subject;
   final String university;
@@ -31,6 +32,7 @@ class Textbook {
     required this.institutionType,
     required this.major,
     required this.name,
+    required this.author,
     required this.price,
     required this.subject,
     required this.university,
